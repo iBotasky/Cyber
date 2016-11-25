@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.res.Configuration;
 
 /**
+ *
  * Created by Botasky on 21/11/2016.
  */
 
@@ -23,7 +24,7 @@ public class CyberApplication extends Application {
     /**
      * 私有的构造函数
      */
-    private CyberApplication() {}
+    public CyberApplication() {}
     public static CyberApplication getInstance() {
         return SingletonHolder.instance;
     }

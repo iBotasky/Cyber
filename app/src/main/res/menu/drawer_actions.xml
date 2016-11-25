@@ -1,4 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_android"
+            android:title="示例1"/>
+        <item
+            android:id="@+id/nav_devices"
+            android:icon="@drawable/ic_device"
+            android:title="示例2"/>
+        <item
+            android:id="@+id/nav_favorites"
+            android:icon="@drawable/ic_favorite_on"
+            android:title="示例3"/>
+        <item
+            android:id="@+id/nav_userinfo"
+            android:icon="@drawable/ic_account"
+            android:title="示例4"/>
+    </group>
+
+    <item android:title="链接">
+        <menu>
+            <item
+                android:id="@+id/nav_link1"
+                android:icon="@drawable/ic_link"
+                android:title="链接1"/>
+            <item
+                android:id="@+id/nav_link2"
+                android:icon="@drawable/ic_link"
+                android:title="链接2"/>
+        </menu>
+    </item>
 </menu>

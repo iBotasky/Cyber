@@ -14,5 +14,11 @@
         android:layout_height="150dp"
         android:src="@drawable/avater"
         app:hasBorder="false"/>
-
+    <TextView
+        android:layout_alignParentBottom="true"
+        android:text="Your Name"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_1000_w"/>
 </RelativeLayout>

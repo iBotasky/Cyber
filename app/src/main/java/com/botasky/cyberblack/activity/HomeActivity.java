@@ -1,6 +1,8 @@
 package com.botasky.cyberblack.activity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
@@ -8,10 +10,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -22,14 +26,14 @@ import com.botasky.cyberblack.fragment.BaseFragment;
 import com.botasky.cyberblack.fragment.FilmFragment;
 import com.botasky.cyberblack.fragment.GirlsFragment;
 import com.botasky.cyberblack.fragment.ReadingFragment;
+import com.botasky.cyberblack.fragment.SplashFragment;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /**
  * Created by Botasky on 25/11/2016.
  */
@@ -52,11 +56,40 @@ public class HomeActivity extends BaseActivity {
     @BindView(R.id.home_tv_name)
     TextView homeTvName;
 
+    //Splash的操作
+    private Handler mHandler = new Handler();
+    private static class DelayRunnable implements Runnable{
+        private WeakReference<Context> contextRef;
+        private WeakReference<SplashFragment> fragmentRef;
+
+        public DelayRunnable(Context contextRef, SplashFragment fragmentRef) {
+            this.fragmentRef = new WeakReference<SplashFragment>(fragmentRef);
+            this.contextRef = new WeakReference<Context>(contextRef);
+        }
+
+        @Override
+        public void run() {
+            AppCompatActivity context = (AppCompatActivity) contextRef.get();
+            if (context != null) {
+                SplashFragment splashFragment = fragmentRef.get();
+                if (splashFragment == null)
+                    return;
+                final FragmentTransaction transaction = context.getSupportFragmentManager().beginTransaction();
+                transaction.remove(splashFragment);
+                transaction.commit();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        final SplashFragment splashFragment = new SplashFragment();
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.home_view_continer, splashFragment);
+        transaction.commit();
+        mHandler.postDelayed(new DelayRunnable(this, splashFragment), 2500);
         ButterKnife.bind(this);
         initViews();
     }

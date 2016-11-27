@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import com.botasky.cyberblack.activity.BaseActivity;
 
+import butterknife.Unbinder;
+
 /**
  * Created by Botasky on 27/11/2016.
  */
@@ -17,6 +19,7 @@ import com.botasky.cyberblack.activity.BaseActivity;
 public abstract class BaseFragment extends Fragment {
     protected static final String TITLE = "title";
     protected BaseActivity mActivity;
+    private Unbinder unbinder;
 
     protected abstract void initView(View view, Bundle savedInstanceState);
 
@@ -45,5 +48,10 @@ public abstract class BaseFragment extends Fragment {
         View view = inflater.inflate(getLayoutId(), container, false);
         initView(view, savedInstanceState);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }

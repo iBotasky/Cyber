@@ -1,26 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/home_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
         <android.support.v7.widget.Toolbar
+            android:padding="10dp"
             android:id="@+id/home_tool_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
+            <com.beardedhen.androidbootstrap.BootstrapCircleThumbnail
+                android:id="@+id/home_iv_avater"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/avater"
+                app:hasBorder="false" />
+
+            <TextView
+                android:id="@+id/home_tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nextFocusRight="@id/home_iv_avater"
+                android:text="Your Name"
+                android:textColor="@color/grey_050"
+                android:textSize="15sp"
+                android:layout_marginStart="25dp"/>
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/home_tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </android.support.design.widget.AppBarLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/home_view_pager"
         android:layout_width="match_parent"

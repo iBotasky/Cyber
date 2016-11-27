@@ -11,6 +11,10 @@
             android:icon="@drawable/home_film"
             android:title="@string/home_film"/>
         <item
+            android:id="@+id/nav_girls"
+            android:icon="@drawable/home_girls"
+            android:title="@string/home_girls"/>
+        <item
             android:id="@+id/nav_account"
             android:icon="@drawable/home_account"
             android:title="@string/home_profile"/>

@@ -8,12 +8,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Adapter;
+import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.fragment.BaseFragment;
 import com.botasky.cyberblack.fragment.FilmFragment;
@@ -25,12 +28,15 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by Botasky on 25/11/2016.
  */
 
 public class HomeActivity extends BaseActivity {
+    @BindView(R.id.home_drawer)
+    DrawerLayout homeDrawer;
     @BindView(R.id.home_tool_bar)
     Toolbar homeToolBar;
     @BindView(R.id.home_tab_layout)
@@ -41,6 +47,10 @@ public class HomeActivity extends BaseActivity {
     ViewPager homeViewPager;
     @BindView(R.id.home_nav)
     NavigationView homeNav;
+    @BindView(R.id.home_iv_avater)
+    BootstrapCircleThumbnail homeIvAvater;
+    @BindView(R.id.home_tv_name)
+    TextView homeTvName;
 
 
     @Override
@@ -59,12 +69,12 @@ public class HomeActivity extends BaseActivity {
     protected void initViews() {
         setSupportActionBar(homeToolBar);
         setupDrawerContent();
-
+        //获得ActionBar
         final ActionBar actionBar = getSupportActionBar();
-
         actionBar.setHomeAsUpIndicator(R.drawable.home_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        //设置Title不可见
+        actionBar.setDisplayShowTitleEnabled(false);
         setupViewPager();
 
         homeTabLayout.setupWithViewPager(homeViewPager);
@@ -75,15 +85,34 @@ public class HomeActivity extends BaseActivity {
 
     }
 
-    private void setupDrawerContent(){
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                homeDrawer.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void setupDrawerContent() {
         homeNav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 item.setCheckable(true);
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.nav_film:
+                        homeViewPager.setCurrentItem(0);
+                        homeDrawer.closeDrawers();
                         break;
                     case R.id.nav_reading:
+                        homeViewPager.setCurrentItem(1);
+                        homeDrawer.closeDrawers();
+                        break;
+                    case R.id.nav_girls:
+                        homeViewPager.setCurrentItem(2);
+                        homeDrawer.closeDrawers();
                         break;
                     case R.id.nav_account:
                         break;
@@ -95,10 +124,11 @@ public class HomeActivity extends BaseActivity {
                 return true;
             }
         });
+
     }
 
 
-    private void setupViewPager(){
+    private void setupViewPager() {
         FilmFragment filmFragment = FilmFragment.newInstance("电影");
         ReadingFragment readingFragment = ReadingFragment.newInstance("阅读");
         GirlsFragment girlsFragment = GirlsFragment.newInstance("妹子");
@@ -109,14 +139,14 @@ public class HomeActivity extends BaseActivity {
         homeViewPager.setAdapter(adapter);
     }
 
-    static class Adapter extends FragmentPagerAdapter{
+    static class Adapter extends FragmentPagerAdapter {
         private final List<BaseFragment> fragmentList = new ArrayList<>();
 
-        public Adapter(FragmentManager fm){
+        public Adapter(FragmentManager fm) {
             super(fm);
         }
 
-        public void addFragment(BaseFragment fragment){
+        public void addFragment(BaseFragment fragment) {
             fragmentList.add(fragment);
         }
 
@@ -135,4 +165,5 @@ public class HomeActivity extends BaseActivity {
             return fragmentList.get(position).getTitle();
         }
     }
+
 }

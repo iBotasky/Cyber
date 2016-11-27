@@ -76,7 +76,7 @@ public class HomeActivity extends BaseActivity {
                     return;
                 final FragmentTransaction transaction = context.getSupportFragmentManager().beginTransaction();
                 transaction.remove(splashFragment);
-                transaction.commit();
+                transaction.commitAllowingStateLoss();
             }
         }
     }

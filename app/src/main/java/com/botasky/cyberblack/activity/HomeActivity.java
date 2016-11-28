@@ -171,6 +171,7 @@ public class HomeActivity extends BaseActivity {
         adapter.addFragment(readingFragment);
         adapter.addFragment(girlsFragment);
         homeViewPager.setAdapter(adapter);
+        homeViewPager.setOffscreenPageLimit(adapter.getCount());
     }
 
     static class Adapter extends FragmentPagerAdapter {

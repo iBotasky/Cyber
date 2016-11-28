@@ -1,9 +1,27 @@
 package com.botasky.cyberblack.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.botasky.cyberblack.R;
+import com.botasky.cyberblack.adapter.RefreshRecyclerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by Botasky on 27/11/2016.
@@ -11,7 +29,16 @@ import com.botasky.cyberblack.R;
 
 public class GirlsFragment extends BaseFragment {
 
-    public static GirlsFragment newInstance(String args){
+
+    @BindView(R.id.girls_recyle)
+    RecyclerView girlsRecyle;
+    @BindView(R.id.girls_swipe_refresh)
+    SwipeRefreshLayout girlsSwipeRefresh;
+
+    LinearLayoutManager linearLayoutManager;
+    RefreshRecyclerAdapter adapter;
+
+    public static GirlsFragment newInstance(String args) {
         Bundle bundle = new Bundle();
         bundle.putString(TITLE, args);
         GirlsFragment girlsFragment = new GirlsFragment();
@@ -21,12 +48,69 @@ public class GirlsFragment extends BaseFragment {
 
 
     @Override
-    protected void initView(View view, Bundle savedInstanceState) {
-
-    }
-
-    @Override
     protected int getLayoutId() {
         return R.layout.fragment_girls;
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        initView(rootView, savedInstanceState);
+        return rootView;
+    }
+
+
+    @Override
+    protected void initView(View view, Bundle savedInstanceState) {
+        girlsRecyle.setHasFixedSize(true);
+        girlsRecyle.setLayoutManager(linearLayoutManager);
+
+        //设置刷新图标背景色
+        girlsSwipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
+        //设置刷新的颜色
+        girlsSwipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light,
+                android.R.color.holo_red_light, android.R.color.holo_orange_light,
+                android.R.color.holo_green_light);
+        girlsSwipeRefresh.setProgressViewOffset(false, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
+                        .getDisplayMetrics()));
+        linearLayoutManager = new LinearLayoutManager(mActivity);
+        linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+        girlsRecyle.setLayoutManager(linearLayoutManager);
+        //添加分隔线  
+        girlsRecyle.setAdapter(adapter = new RefreshRecyclerAdapter(mActivity));
+        girlsSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.d("zttjiangqq", "invoke onRefresh...");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<String> newDatas = new ArrayList<String>();
+                        for (int i = 0; i < 5; i++) {
+                            int index = i + 1;
+                            newDatas.add("new item" + index);
+                        }
+                        adapter.addItem(newDatas);
+                        girlsSwipeRefresh.setRefreshing(false);
+                        Toast.makeText(mActivity, "更新了五条数据...", Toast.LENGTH_SHORT).show();
+                    }
+                }, 5000);
+            }
+        });
+
+    }
+
+
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+
 }

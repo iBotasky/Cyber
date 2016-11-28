@@ -19,7 +19,7 @@ import butterknife.Unbinder;
 public abstract class BaseFragment extends Fragment {
     protected static final String TITLE = "title";
     protected BaseActivity mActivity;
-    private Unbinder unbinder;
+    protected Unbinder unbinder;
 
     protected abstract void initView(View view, Bundle savedInstanceState);
 
@@ -46,12 +46,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), container, false);
-        initView(view, savedInstanceState);
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
 }

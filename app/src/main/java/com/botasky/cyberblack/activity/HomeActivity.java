@@ -90,7 +90,7 @@ public class HomeActivity extends BaseActivity {
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.home_view_continer, splashFragment);
         transaction.commit();
-        mHandler.postDelayed(new DelayRunnable(this, splashFragment), 2500);
+        mHandler.postDelayed(new DelayRunnable(this, splashFragment), 4000);
         ButterKnife.bind(this);
         initViews();
     }

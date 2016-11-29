@@ -5,15 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.botasky.cyberblack.R;
+import com.botasky.cyberblack.util.ImageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private LayoutInflater mInflater;
+    private Context mContext;
     private List<String> mTitles = null;
 
     private static final int TYPE_ITEM = 0;
@@ -26,6 +29,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static final int LOADING_MORE = 1;
 
     public RefreshRecyclerAdapter(Context context) {
+        this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mTitles = new ArrayList<String>();
         for (int i = 0; i < 20; i++) {
@@ -43,18 +47,18 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
      */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        final View view = mInflater.inflate(R.layout.item_recycler_layout, parent, false);
+//        final View view = mInflater.inflate(R.layout.item_girls_layout, parent, false);
 //        //这边可以做一些属性设置，甚至事件监听绑定
 //        //view.setBackgroundColor(Color.RED);
 //        ViewHolder viewHolder = new ViewHolder(view);
 //        return viewHolder;
         View view;
         if (viewType == TYPE_ITEM) {
-            view = mInflater.inflate(R.layout.item_recycler_layout, parent, false);
+            view = mInflater.inflate(R.layout.item_girls_layout, parent, false);
             ItemViewHolder itemViewHolder = new ItemViewHolder(view);
             return itemViewHolder;
         } else if (viewType == TYPE_FOOT) {
-            view = mInflater.inflate(R.layout.item_recycler_footer, parent, false);
+            view = mInflater.inflate(R.layout.item_girls_footer, parent, false);
             FootViewHolder footViewHolder = new FootViewHolder(view);
             return footViewHolder;
 
@@ -71,7 +75,8 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
-            ((ItemViewHolder) holder).item_tv.setText(mTitles.get(position));
+//            ((ItemViewHolder) holder).girls_iv.setText(mTitles.get(position));
+            ImageUtil.displayImageByUrl(mContext, "http://ww2.sinaimg.cn/large/610dc034jw1f9vyl2fqi0j20u011habc.jpg", ((ItemViewHolder) holder).girls_iv);
             holder.itemView.setTag(position);
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
@@ -103,11 +108,11 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        public TextView item_tv;
+        public ImageView girls_iv;
 
         public ItemViewHolder(View view) {
             super(view);
-            item_tv = (TextView) view.findViewById(R.id.item_tv);
+            girls_iv = (ImageView) view.findViewById(R.id.girls_iv);
         }
     }
 

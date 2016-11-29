@@ -24,6 +24,8 @@ public class ImageUtil {
                 .with(context)
                 .load(url)
                 .placeholder(R.drawable.default_image)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .centerCrop()
                 .crossFade()
                 .into(imageView);
 

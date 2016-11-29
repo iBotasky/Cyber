@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -21,7 +22,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by Botasky on 27/11/2016.
@@ -36,6 +36,7 @@ public class GirlsFragment extends BaseFragment {
     SwipeRefreshLayout girlsSwipeRefresh;
 
     LinearLayoutManager linearLayoutManager;
+    StaggeredGridLayoutManager staggeredGridLayoutManager;
     RefreshRecyclerAdapter adapter;
     private int lastVisibleItem;
 
@@ -67,11 +68,9 @@ public class GirlsFragment extends BaseFragment {
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
         girlsRecyle.setHasFixedSize(true);
-        girlsRecyle.setLayoutManager(linearLayoutManager);
-
         //设置刷新图标背景色
         girlsSwipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        //设置刷新的颜色
+        //设置刷新转圈的颜色
         girlsSwipeRefresh.setColorSchemeResources(
                 android.R.color.holo_blue_light,
                 android.R.color.holo_red_light,
@@ -83,6 +82,7 @@ public class GirlsFragment extends BaseFragment {
         //设置LinearLayoutManager
         linearLayoutManager = new LinearLayoutManager(mActivity);
         linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+//        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         girlsRecyle.setLayoutManager(linearLayoutManager);
         //设置Adapter
         girlsRecyle.setAdapter(adapter = new RefreshRecyclerAdapter(mActivity));
@@ -90,7 +90,6 @@ public class GirlsFragment extends BaseFragment {
         girlsSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.d("zttjiangqq", "invoke onRefresh...");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -140,6 +139,7 @@ public class GirlsFragment extends BaseFragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//                lastVisibleItem = staggeredGridLayoutManager.findLastVisibleItemPositions()
             }
         });
 

@@ -49,7 +49,7 @@ public class HttpHelper {
     public HttpHelper() {
         //Map used to store RetrofitService
         mServiceMap = new HashMap<>();
-        this.mContext = CyberApplication.getInstance().getApplicationContext();
+        this.mContext = CyberApplication.getInstance().getmContext();
     }
 
 

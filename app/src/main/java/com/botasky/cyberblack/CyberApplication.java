@@ -1,6 +1,7 @@
 package com.botasky.cyberblack;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.res.Configuration;
 
 /**
@@ -9,6 +10,7 @@ import android.content.res.Configuration;
  */
 
 public class CyberApplication extends Application {
+    private static Context mContext;
     /**
      * 单例模式
      * 优点：延迟加载，线程安全（java中class加载时互斥的），也减少了内存消耗
@@ -25,6 +27,7 @@ public class CyberApplication extends Application {
      * 私有的构造函数
      */
     public CyberApplication() {}
+
     public static CyberApplication getInstance() {
         return SingletonHolder.instance;
     }
@@ -33,10 +36,12 @@ public class CyberApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext = getApplicationContext();
     }
 
-
-
+    public static Context getmContext() {
+        return mContext;
+    }
 
     /**
      * 作为onLowMemory的一个特定于应用程序的替代选择，在android4.0时引入，

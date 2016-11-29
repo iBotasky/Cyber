@@ -32,10 +32,6 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mTitles = new ArrayList<String>();
-        for (int i = 0; i < 20; i++) {
-            int index = i + 1;
-            mTitles.add("item" + index);
-        }
     }
 
     /**
@@ -76,7 +72,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
 //            ((ItemViewHolder) holder).girls_iv.setText(mTitles.get(position));
-            ImageUtil.displayImageByUrl(mContext, "http://ww2.sinaimg.cn/large/610dc034jw1f9vyl2fqi0j20u011habc.jpg", ((ItemViewHolder) holder).girls_iv);
+            ImageUtil.displayImageByUrl(mContext, mTitles.get(position), ((ItemViewHolder) holder).girls_iv);
             holder.itemView.setTag(position);
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;

@@ -16,12 +16,21 @@ import android.widget.Toast;
 
 import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.adapter.RefreshRecyclerAdapter;
+import com.botasky.cyberblack.network.HttpHelper;
+import com.botasky.cyberblack.network.Urls;
+import com.botasky.cyberblack.network.api.GirlsApi;
+import com.botasky.cyberblack.network.response.GirlsResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Botasky on 27/11/2016.
@@ -39,6 +48,7 @@ public class GirlsFragment extends BaseFragment {
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     RefreshRecyclerAdapter adapter;
     private int lastVisibleItem;
+    private int page = 1;
 
 
     public static GirlsFragment newInstance(String args) {
@@ -86,6 +96,8 @@ public class GirlsFragment extends BaseFragment {
         girlsRecyle.setLayoutManager(linearLayoutManager);
         //设置Adapter
         girlsRecyle.setAdapter(adapter = new RefreshRecyclerAdapter(mActivity));
+        //第一次去访问初始化数据
+        getData();
         //设置下拉刷新
         girlsSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -116,18 +128,19 @@ public class GirlsFragment extends BaseFragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount()) {
                     adapter.changeLoadStatus(RefreshRecyclerAdapter.LOADING_MORE);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            List<String> newDatas = new ArrayList<String>();
-                            for (int i = 0; i < 5; i++) {
-                                int index = i + 1;
-                                newDatas.add("more item" + index);
-                            }
-                            adapter.addMoreItem(newDatas);
-                            adapter.changeLoadStatus(RefreshRecyclerAdapter.PULLUP_LOAD_MORE);
-                        }
-                    }, 1000);
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            List<String> newDatas = new ArrayList<String>();
+//                            for (int i = 0; i < 5; i++) {
+//                                int index = i + 1;
+//                                newDatas.add("more item" + index);
+//                            }
+//                            adapter.addMoreItem(newDatas);
+//                            adapter.changeLoadStatus(RefreshRecyclerAdapter.PULLUP_LOAD_MORE);
+//                        }
+//                    }, 1000);
+                    getData();
                 }
             }
 
@@ -139,10 +152,45 @@ public class GirlsFragment extends BaseFragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-//                lastVisibleItem = staggeredGridLayoutManager.findLastVisibleItemPositions()
             }
         });
 
+    }
+
+    private void getData() {
+        final List<String> data = new ArrayList<>();
+        HttpHelper httpHelper = new HttpHelper();
+        httpHelper.setEnd_points(Urls.GANK_IO_HOST);
+        httpHelper.getService(GirlsApi.class)
+                .getGirls(page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<GirlsResponse, Observable<GirlsResponse.ResultsBean>>() {
+                    @Override
+                    public Observable<GirlsResponse.ResultsBean> call(GirlsResponse girlsResponse) {
+                        return Observable.from(girlsResponse.getResults());
+                    }
+                })
+                .subscribe(new Subscriber<GirlsResponse.ResultsBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.e("GetGirls ", "onComplete");
+                        adapter.addMoreItem(data);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("GetGirls ", "onError " + e);
+
+                    }
+
+                    @Override
+                    public void onNext(GirlsResponse.ResultsBean resultsBean) {
+                        Log.e("GetGirls ", "onNext "  + resultsBean.get_id());
+                        data.add(resultsBean.getUrl());
+                    }
+                });
+        page += 1;
     }
 
 

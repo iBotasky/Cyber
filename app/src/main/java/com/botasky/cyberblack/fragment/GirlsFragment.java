@@ -37,6 +37,8 @@ public class GirlsFragment extends BaseFragment {
 
     LinearLayoutManager linearLayoutManager;
     RefreshRecyclerAdapter adapter;
+    private int lastVisibleItem;
+
 
     public static GirlsFragment newInstance(String args) {
         Bundle bundle = new Bundle();
@@ -70,17 +72,21 @@ public class GirlsFragment extends BaseFragment {
         //设置刷新图标背景色
         girlsSwipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
         //设置刷新的颜色
-        girlsSwipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light,
-                android.R.color.holo_red_light, android.R.color.holo_orange_light,
+        girlsSwipeRefresh.setColorSchemeResources(
+                android.R.color.holo_blue_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_orange_light,
                 android.R.color.holo_green_light);
         girlsSwipeRefresh.setProgressViewOffset(false, 0, (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
                         .getDisplayMetrics()));
+        //设置LinearLayoutManager
         linearLayoutManager = new LinearLayoutManager(mActivity);
         linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         girlsRecyle.setLayoutManager(linearLayoutManager);
-        //添加分隔线  
+        //设置Adapter
         girlsRecyle.setAdapter(adapter = new RefreshRecyclerAdapter(mActivity));
+        //设置下拉刷新
         girlsSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -101,9 +107,43 @@ public class GirlsFragment extends BaseFragment {
             }
         });
 
+        //设置RecyleView滑动监听
+        girlsRecyle.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            /**
+             * 当RecyclerView的滑动状态改变时触发
+             */
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount()) {
+                    adapter.changeLoadStatus(RefreshRecyclerAdapter.LOADING_MORE);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            List<String> newDatas = new ArrayList<String>();
+                            for (int i = 0; i < 5; i++) {
+                                int index = i + 1;
+                                newDatas.add("more item" + index);
+                            }
+                            adapter.addMoreItem(newDatas);
+                            adapter.changeLoadStatus(RefreshRecyclerAdapter.PULLUP_LOAD_MORE);
+                        }
+                    }, 1000);
+                }
+            }
+
+            /**
+             * 当RecyclerView滑动时触发
+             * 类似点击事件的MotionEvent.ACTION_MOVE
+             */
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+            }
+        });
+
     }
-
-
 
 
     @Override

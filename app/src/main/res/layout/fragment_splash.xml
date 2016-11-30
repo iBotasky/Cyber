@@ -18,11 +18,12 @@
         android:id="@+id/hello_tv_cn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="90dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="130dp"
         android:layout_marginTop="100dp"
-        android:text="你好，世界"
+        android:text="你好,世界"
         android:textColor="@color/grey_1000_w"
-        android:textSize="30sp" />
+        android:textSize="27sp" />
 
     <TextView
         android:id="@+id/hello_tv_france"
@@ -37,13 +38,11 @@
         android:id="@+id/hello_tv_korea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="70dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginTop="120dp"
         android:text="안녕하세요, 세계"
         android:textColor="@color/grey_200"
-        android:textSize="25sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/hello_tv_jpan"
@@ -62,12 +61,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginStart="11dp"
         android:text="Hallo,Welt"
         android:textColor="@color/grey_300"
-        android:textSize="30sp" />
+        android:textSize="25sp" />
 
 
     <TextView
@@ -78,7 +76,7 @@
         android:layout_centerVertical="true"
         android:text="Hello, World"
         android:textColor="@color/grey_050"
-        android:textSize="40sp" />
+        android:textSize="45sp" />
 
     <TextView
         android:id="@+id/hello_tv_world"
@@ -91,6 +89,8 @@
         android:textColor="@color/grey_050"
         android:textSize="18sp" />
 
+
+
     <TextView
         android:id="@+id/hello_tv_russuia"
         android:layout_width="wrap_content"
@@ -99,9 +99,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="120dp"
         android:layout_marginTop="24dp"
-        android:text="Saluton,mondo"
-        android:textColor="@color/grey_050"
-        android:textSize="14sp" />
+        android:text="Hei maailma"
+        android:textColor="@color/grey_300"
+        android:textSize="15sp" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -111,6 +111,72 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:src="@drawable/splash_device" />
+
+    <TextView
+        android:id="@+id/hello_tv_fenlan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="70dp"
+        android:layout_marginEnd="35dp"
+        android:text="Saluton,mondo"
+        android:textColor="@color/grey_050"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/hello_tv_poland"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignStart="@+id/hello_tv_germany"
+        android:text="Witaj świecie"
+        android:textColor="@color/grey_050"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/hello_tv_alb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/hello_tv_korea"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="21dp"
+        android:text="مرحبا بالعالم"
+        android:textColor="@color/grey_050"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/hello_tv_ael"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:text="Olá Mundo"
+        android:textColor="@color/grey_050"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/hello_tv_tailan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="180dp"
+        android:text="สวัสดีชาวโลก"
+        android:textColor="@color/grey_300"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/hello_tv_hsk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="45dp"
+        android:layout_marginTop="108dp"
+        android:text="Сәлем Әлем"
+        android:textColor="@color/grey_200"
+        android:textSize="19sp" />
 
 
 </RelativeLayout>

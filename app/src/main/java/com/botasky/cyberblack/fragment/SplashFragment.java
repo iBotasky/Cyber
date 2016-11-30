@@ -1,8 +1,6 @@
 package com.botasky.cyberblack.fragment;
 
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,15 +40,65 @@ public class SplashFragment extends BaseFragment {
     TextView helloTvRussuia;
     @BindView(R.id.imageView)
     ImageView imageView;
+    @BindView(R.id.hello_tv_fenlan)
+    TextView helloTvFenlan;
+    @BindView(R.id.hello_tv_poland)
+    TextView helloTvPoland;
+    @BindView(R.id.hello_tv_alb)
+    TextView helloTvAlb;
+    @BindView(R.id.hello_tv_ael)
+    TextView helloTvAel;
+    @BindView(R.id.hello_tv_tailan)
+    TextView helloTvTailan;
+    @BindView(R.id.hello_tv_hsk)
+    TextView helloTvHsk;
 
-    private Animation tvSpAnim;
+    private Animation alpha500;
+    private Animation alpha1000;
+    private Animation alpha1500;
+    private Animation alpha2000;
+    private Animation alpha2500;
+    private Animation alpha3000;
+    private Animation alpha3500;
+    private Animation alpha4000;
 
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
-        tvSpAnim = new AlphaAnimation(0.0f,1.0f);
-        tvSpAnim.setDuration(4000);
-        helloTvSp.startAnimation(tvSpAnim);
+        alpha500 = new AlphaAnimation(0.0f, 1.0f);
+        alpha1000 = new AlphaAnimation(0.0f, 1.0f);
+        alpha1500 = new AlphaAnimation(0.0f, 1.0f);
+        alpha2000 = new AlphaAnimation(0.0f, 1.0f);
+        alpha2500 = new AlphaAnimation(0.0f, 1.0f);
+        alpha3000 = new AlphaAnimation(0.0f, 1.0f);
+        alpha3500 = new AlphaAnimation(0.0f, 1.0f);
+        alpha4000 = new AlphaAnimation(0.0f, 1.0f);
+
+
+        alpha500.setDuration(500);
+        alpha1000.setDuration(1000);
+        alpha1500.setDuration(1500);
+        alpha2000.setDuration(2000);
+        alpha2500.setDuration(2500);
+        alpha3000.setDuration(3000);
+        alpha3500.setDuration(3500);
+        alpha4000.setDuration(4000);
+
+
+        helloTvSp.startAnimation(alpha500);
+        helloTvGermany.startAnimation(alpha1000);
+        helloTvRussuia.startAnimation(alpha2000);
+        helloTvFrance.startAnimation(alpha4000);
+        helloTvCn.startAnimation(alpha4000);
+        helloTvKorea.startAnimation(alpha3000);
+        helloTvWorld.startAnimation(alpha1500);
+        helloTvJpan.startAnimation(alpha2500);
+        helloTvFenlan.startAnimation(alpha1500);
+        helloTvTailan.startAnimation(alpha3500);
+        helloTvHsk.startAnimation(alpha2500);
+        helloTvAlb.startAnimation(alpha3500);
+        helloTvPoland.startAnimation(alpha500);
+        helloTvAel.startAnimation(alpha1000);
     }
 
     @Override

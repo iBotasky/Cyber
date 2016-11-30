@@ -102,19 +102,20 @@ public class GirlsFragment extends BaseFragment {
         girlsSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<String> newDatas = new ArrayList<String>();
-                        for (int i = 0; i < 5; i++) {
-                            int index = i + 1;
-                            newDatas.add("new item" + index);
-                        }
-                        adapter.addItem(newDatas);
-                        girlsSwipeRefresh.setRefreshing(false);
-                        Toast.makeText(mActivity, "更新了五条数据...", Toast.LENGTH_SHORT).show();
-                    }
-                }, 5000);
+                // TODO: 30/11/2016 后面整改逻辑
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        List<String> newDatas = new ArrayList<String>();
+//                        for (int i = 0; i < 5; i++) {
+//                            int index = i + 1;
+//                            newDatas.add("new item" + index);
+//                        }
+//                        adapter.addItem(newDatas);
+//                        girlsSwipeRefresh.setRefreshing(false);
+//                        Toast.makeText(mActivity, "更新了五条数据...", Toast.LENGTH_SHORT).show();
+//                    }
+//                }, 5000);
             }
         });
 
@@ -193,7 +194,7 @@ public class GirlsFragment extends BaseFragment {
         page += 1;
     }
 
-
+    
     @Override
     public void onDestroyView() {
         super.onDestroyView();

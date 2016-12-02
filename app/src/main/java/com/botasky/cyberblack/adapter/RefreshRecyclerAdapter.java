@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.botasky.cyberblack.R;
+import com.botasky.cyberblack.network.response.GirlsResponse;
 import com.botasky.cyberblack.util.ImageUtil;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private LayoutInflater mInflater;
     private Context mContext;
-    private List<String> mTitles = null;
+    private List<GirlsResponse.ResultsBean> mBeans = null;
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOT = 1;
@@ -31,7 +32,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public RefreshRecyclerAdapter(Context context) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
-        this.mTitles = new ArrayList<String>();
+        this.mBeans = new ArrayList<GirlsResponse.ResultsBean>();
     }
 
     /**
@@ -72,7 +73,8 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
 //            ((ItemViewHolder) holder).girls_iv.setText(mTitles.get(position));
-            ImageUtil.displayImageByUrl(mContext, mTitles.get(position), ((ItemViewHolder) holder).girls_iv);
+            ImageUtil.displayImageByUrl(mContext, mBeans.get(position).getUrl(), ((ItemViewHolder) holder).girls_iv);
+            ((ItemViewHolder) holder).girls_tv.setText("From: GankIO " + " Create By:"+ mBeans.get(position).getWho() );
             holder.itemView.setTag(position);
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
@@ -91,7 +93,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemCount() {
         //增加了Foot所以+1
-        return mTitles.size() + 1;
+        return mBeans.size() + 1;
     }
 
     @Override
@@ -105,10 +107,12 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     //自定义的ViewHolder，持有每个Item的的所有界面元素
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         public ImageView girls_iv;
+        public TextView girls_tv;
 
         public ItemViewHolder(View view) {
             super(view);
             girls_iv = (ImageView) view.findViewById(R.id.girls_iv);
+            girls_tv = (TextView) view.findViewById(R.id.girls_tv);
         }
     }
 
@@ -123,18 +127,18 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
 
     //下拉添加数据
-    public void addItem(List<String> newDatas) {
+    public void addItem(List<GirlsResponse.ResultsBean> newDatas) {
         //mTitles.add(position, data);
         //notifyItemInserted(position);
-        newDatas.addAll(mTitles);
-        mTitles.removeAll(mTitles);
-        mTitles.addAll(newDatas);
+        newDatas.addAll(mBeans);
+        mBeans.removeAll(mBeans);
+        mBeans.addAll(newDatas);
         notifyDataSetChanged();
     }
 
     //上滑加载数据
-    public void addMoreItem(List<String> newDatas) {
-        mTitles.addAll(newDatas);
+    public void addMoreItem(List<GirlsResponse.ResultsBean> newDatas) {
+        mBeans.addAll(newDatas);
         notifyDataSetChanged();
     }
 

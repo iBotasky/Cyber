@@ -130,18 +130,6 @@ public class GirlsFragment extends BaseFragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount()) {
                     adapter.changeLoadStatus(RefreshRecyclerAdapter.LOADING_MORE);
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            List<String> newDatas = new ArrayList<String>();
-//                            for (int i = 0; i < 5; i++) {
-//                                int index = i + 1;
-//                                newDatas.add("more item" + index);
-//                            }
-//                            adapter.addMoreItem(newDatas);
-//                            adapter.changeLoadStatus(RefreshRecyclerAdapter.PULLUP_LOAD_MORE);
-//                        }
-//                    }, 1000);
                     getData();
                 }
             }
@@ -160,20 +148,21 @@ public class GirlsFragment extends BaseFragment {
     }
 
     private void getData() {
-        final List<String> data = new ArrayList<>();
+        //Rxjava map是一对一的转换， flatmap是一对多的转换，这里z还需要得到一个list，就可以，所以用map
+        final List<GirlsResponse.ResultsBean> data = new ArrayList<>();
         HttpHelper httpHelper = new HttpHelper();
         httpHelper.setEnd_points(Urls.GANK_IO_HOST);
         httpHelper.getService(GirlsApi.class)
                 .getGirls(page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<GirlsResponse, Observable<GirlsResponse.ResultsBean>>() {
+                .map(new Func1<GirlsResponse, List<GirlsResponse.ResultsBean>>() {
                     @Override
-                    public Observable<GirlsResponse.ResultsBean> call(GirlsResponse girlsResponse) {
-                        return Observable.from(girlsResponse.getResults());
+                    public List<GirlsResponse.ResultsBean> call(GirlsResponse girlsResponse) {
+                        return girlsResponse.getResults();
                     }
                 })
-                .subscribe(new Subscriber<GirlsResponse.ResultsBean>() {
+                .subscribe(new Subscriber<List<GirlsResponse.ResultsBean>>() {
                     @Override
                     public void onCompleted() {
                         Log.e("GetGirls ", "onComplete");
@@ -187,9 +176,9 @@ public class GirlsFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onNext(GirlsResponse.ResultsBean resultsBean) {
-                        Log.e("GetGirls ", "onNext "  + resultsBean.get_id());
-                        data.add(resultsBean.getUrl());
+                    public void onNext(List<GirlsResponse.ResultsBean> resultsBean) {
+                        Log.e("GetGirls ", "onNext "  + resultsBean);
+                        data.addAll(resultsBean);
                     }
                 });
         page += 1;

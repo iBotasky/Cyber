@@ -167,6 +167,7 @@ public class HomeActivity extends BaseActivity {
         ReadingFragment readingFragment = ReadingFragment.newInstance("阅读");
         GirlsFragment girlsFragment = GirlsFragment.newInstance("妹子");
         Adapter adapter = new Adapter(getSupportFragmentManager());
+
         adapter.addFragment(filmFragment);
         adapter.addFragment(readingFragment);
         adapter.addFragment(girlsFragment);

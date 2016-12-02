@@ -116,6 +116,7 @@ public class GirlsFragment extends BaseFragment {
 //                        Toast.makeText(mActivity, "更新了五条数据...", Toast.LENGTH_SHORT).show();
 //                    }
 //                }, 5000);
+                girlsSwipeRefresh.setRefreshing(false);
             }
         });
 

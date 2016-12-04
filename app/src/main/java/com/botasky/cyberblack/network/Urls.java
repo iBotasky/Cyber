@@ -5,7 +5,10 @@ package com.botasky.cyberblack.network;
  */
 
 public class Urls {
-//    http://gank.io/api/data/福利/10/1
+    //    http://gank.io/api/data/福利/10/1
     //GankIo的HOST
     public static final String GANK_IO_HOST = "http://gank.io/api/";
+
+    //豆瓣API的HOST
+    public static final String DOU_BAN_HOST = "https://api.douban.com/v2/";
 }

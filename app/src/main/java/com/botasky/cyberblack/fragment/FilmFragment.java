@@ -149,7 +149,7 @@ public class FilmFragment extends BaseFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ImageUtil.displayImageByUrl(mActivity, mFilms.get(position).getImages().getLarge(), ((ItemViewHolder) holder).film_cover);
             ((ItemViewHolder) holder).film_name.setText(mFilms.get(position).getTitle());
-            ((ItemViewHolder) holder).film_rate.setText(mFilms.get(position).getRating().getAverage() + "/" + mFilms.get(position).getRating().getMax());
+            ((ItemViewHolder) holder).film_rate.setText(mFilms.get(position).getRating().getAverage() + "");
         }
 
         @Override

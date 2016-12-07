@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.botasky.cyberblack.R;
@@ -131,7 +132,7 @@ public class FilmFragment extends BaseFragment {
     }
 
 
-    private  class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    private class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private LayoutInflater mLayoutInflater;
 
         private Adapter() {
@@ -140,7 +141,7 @@ public class FilmFragment extends BaseFragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = mLayoutInflater.inflate(R.layout.item_films_layout, parent,false);
+            View view = mLayoutInflater.inflate(R.layout.item_films_layout, parent, false);
             ItemViewHolder item = new ItemViewHolder(view);
             return item;
         }
@@ -150,6 +151,7 @@ public class FilmFragment extends BaseFragment {
             ImageUtil.displayImageByUrl(mActivity, mFilms.get(position).getImages().getLarge(), ((ItemViewHolder) holder).film_cover);
             ((ItemViewHolder) holder).film_name.setText(mFilms.get(position).getTitle());
             ((ItemViewHolder) holder).film_rate.setText(mFilms.get(position).getRating().getAverage() + "");
+            ((ItemViewHolder) holder).film_rating_bar.setRating((float) (mFilms.get(position).getRating().getAverage() / 2));
         }
 
         @Override
@@ -157,15 +159,18 @@ public class FilmFragment extends BaseFragment {
             return mFilms.size();
         }
 
-        private class ItemViewHolder extends RecyclerView.ViewHolder{
+        private class ItemViewHolder extends RecyclerView.ViewHolder {
             ImageView film_cover;
             TextView film_name;
             TextView film_rate;
+            RatingBar film_rating_bar;
+
             public ItemViewHolder(View itemView) {
                 super(itemView);
                 film_cover = (ImageView) itemView.findViewById(R.id.film_cover);
                 film_name = (TextView) itemView.findViewById(R.id.film_name);
                 film_rate = (TextView) itemView.findViewById(R.id.film_rating);
+                film_rating_bar = (RatingBar) itemView.findViewById(R.id.film_rating_bar);
             }
         }
     }

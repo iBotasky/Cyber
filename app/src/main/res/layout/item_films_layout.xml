@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:isIndicator="false"
                 android:numStars="5"
+                android:progressTint="@color/green_400"
                 android:rating="1"
                 style="?android:attr/ratingBarStyleSmall"/>
             <TextView

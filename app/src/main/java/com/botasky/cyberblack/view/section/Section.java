@@ -3,7 +3,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * 用的第三方的库，地址 ：https://github.com/luizgrp/SectionedRecyclerViewAdapter
+ * 用的第三方的库，地址 ：https://github.com/luizgrp/SectionedRecyclerViewAdapter，里面有示例代码
  *
  * Abstract Section used by SectionedRecyclerViewAdapter.
  *

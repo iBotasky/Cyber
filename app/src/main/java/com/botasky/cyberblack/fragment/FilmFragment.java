@@ -94,14 +94,15 @@ public class FilmFragment extends BaseFragment {
         httpHelper.setEnd_points(Urls.DOU_BAN_HOST);
         httpHelper.getService(DouBanApi.class)
                 .getInTheaters()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())//指定在io线程做Observeable的创建
+                .observeOn(Schedulers.io())//指定在io线程做map转换
                 .map(new Func1<FilmsResponse, List<FilmsResponse.SubjectsBean>>() {
                     @Override
                     public List<FilmsResponse.SubjectsBean> call(FilmsResponse filmsResponse) {
                         return filmsResponse.getSubjects();
                     }
                 })
+                .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者
                 .subscribe(new Action1<List<FilmsResponse.SubjectsBean>>() {
                     @Override
                     public void call(List<FilmsResponse.SubjectsBean> subjectsBeen) {

@@ -151,14 +151,15 @@ public class GirlsFragment extends BaseFragment {
         httpHelper.setEnd_points(Urls.GANK_IO_HOST);
         httpHelper.getService(GirlsApi.class)
                 .getGirls(page)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())//指定在io线程创建爱你Observable
+                .observeOn(Schedulers.io())//指定在io线程做变换操作
                 .map(new Func1<GirlsResponse, List<GirlsResponse.ResultsBean>>() {
                     @Override
                     public List<GirlsResponse.ResultsBean> call(GirlsResponse girlsResponse) {
                         return girlsResponse.getResults();
                     }
                 })
+                .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者操作
                 .subscribe(new Subscriber<List<GirlsResponse.ResultsBean>>() {
                     @Override
                     public void onCompleted() {

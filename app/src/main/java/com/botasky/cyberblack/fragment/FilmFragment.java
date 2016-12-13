@@ -1,11 +1,9 @@
 package com.botasky.cyberblack.fragment;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
@@ -21,10 +18,7 @@ import com.botasky.cyberblack.network.api.DouBanApi;
 import com.botasky.cyberblack.network.response.FilmsResponse;
 import com.botasky.cyberblack.network.response.SubjectsBean;
 import com.botasky.cyberblack.util.ImageUtil;
-import com.botasky.cyberblack.view.section.SectionedRecyclerViewAdapter;
-import com.botasky.cyberblack.view.section.StatelessSection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,15 +36,12 @@ public class FilmFragment extends BaseFragment {
 
     @BindView(R.id.film_in_theaters_recyle)
     RecyclerView film_in_theaters_recyle;
-    @BindView(R.id.film_refresh)
-    SwipeRefreshLayout filmRefresh;
+    @BindView(R.id.film_coming_soon_recyle)
+    RecyclerView filmComingSoonRecyle;
 
-
-    private List<SubjectsBean> mFilms = new ArrayList<>();
+    //    private List<SubjectsBean> mFilms = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
-    private Adapter adapter;
-
-    private SectionedRecyclerViewAdapter mSectionAdapter;
+//    private Adapter adapter;
 
 
     public static FilmFragment newInstance(String title) {
@@ -64,30 +55,16 @@ public class FilmFragment extends BaseFragment {
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
-        mSectionAdapter = new SectionedRecyclerViewAdapter();
-        //swipeRefresh设置
-        //设置刷新图标背景色
-        filmRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        //设置刷新转圈的颜色
-        filmRefresh.setColorSchemeResources(
-                android.R.color.holo_blue_light,
-                android.R.color.holo_red_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_green_light);
-        filmRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                filmRefresh.setRefreshing(false);
-            }
-        });
-        filmRefresh.setProgressViewOffset(false, 0, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
-                        .getDisplayMetrics()));
+//        adapter = new Adapter();
         //RecyleView设置
         linearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
         film_in_theaters_recyle.setHasFixedSize(true);
         film_in_theaters_recyle.setLayoutManager(linearLayoutManager);
-        film_in_theaters_recyle.setAdapter(mSectionAdapter);
+
+        LinearLayoutManager comingsoon = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
+        filmComingSoonRecyle.setHasFixedSize(true);
+        filmComingSoonRecyle.setLayoutManager(comingsoon);
+//        film_in_theaters_recyle.setAdapter(adapter);
         getFimsInTheatersData();
 
 
@@ -97,7 +74,7 @@ public class FilmFragment extends BaseFragment {
      * 获取正在热映的电影
      */
     private void getFimsInTheatersData() {
-        filmRefresh.setRefreshing(true);
+//        filmRefresh.setRefreshing(true);
         HttpHelper httpHelper = new HttpHelper();
         httpHelper.setEnd_points(Urls.DOU_BAN_HOST);
         httpHelper.getService(DouBanApi.class)
@@ -116,11 +93,13 @@ public class FilmFragment extends BaseFragment {
                     public void call(List<SubjectsBean> subjectsBeen) {
                         Log.e("Films", "" + subjectsBeen.size());
                         //完成后设置刷新为false
+                        film_in_theaters_recyle.setAdapter(new Adapter(subjectsBeen));
+                        filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen));
 //                        mFilms.addAll(subjectsBeen);
 //                        adapter.notifyDataSetChanged();
-                        mSectionAdapter.addSection(new FilmSection(subjectsBeen, FilmSection.TYPE_IN_THEATER));
-                        mSectionAdapter.notifyDataSetChanged();
-                        filmRefresh.setRefreshing(false);
+//                        mSectionAdapter.addSection(new FilmSection(subjectsBeen, FilmSection.TYPE_IN_THEATER));
+//                        mSectionAdapter.notifyDataSetChanged();
+//                        filmRefresh.setRefreshing(false);
                     }
                 });
     }
@@ -148,9 +127,11 @@ public class FilmFragment extends BaseFragment {
 
     private class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private LayoutInflater mLayoutInflater;
+        private List<SubjectsBean> datas;
 
-        private Adapter() {
-            mLayoutInflater = LayoutInflater.from(mActivity);
+        private Adapter(List<SubjectsBean> datas) {
+            this.mLayoutInflater = LayoutInflater.from(mActivity);
+            this.datas = datas;
         }
 
         @Override
@@ -162,15 +143,15 @@ public class FilmFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ImageUtil.displayImageByUrl(mActivity, mFilms.get(position).getImages().getLarge(), ((ItemViewHolder) holder).film_cover);
-            ((ItemViewHolder) holder).film_name.setText(mFilms.get(position).getTitle());
-            ((ItemViewHolder) holder).film_rate.setText(mFilms.get(position).getRating().getAverage() + "");
-            ((ItemViewHolder) holder).film_rating_bar.setRating((float) (mFilms.get(position).getRating().getAverage() / 2));
+            ImageUtil.displayImageByUrl(mActivity, datas.get(position).getImages().getLarge(), ((ItemViewHolder) holder).film_cover);
+            ((ItemViewHolder) holder).film_name.setText(datas.get(position).getTitle());
+            ((ItemViewHolder) holder).film_rate.setText(datas.get(position).getRating().getAverage() + "");
+            ((ItemViewHolder) holder).film_rating_bar.setRating((float) (datas.get(position).getRating().getAverage() / 2));
         }
 
         @Override
         public int getItemCount() {
-            return mFilms.size();
+            return datas.size();
         }
 
         private class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -190,94 +171,94 @@ public class FilmFragment extends BaseFragment {
     }
 
 
-    class FilmSection extends StatelessSection {
-        final static int TYPE_IN_THEATER = 0;//正在热映
-        final static int TYPE_COMING_SOON = 1;//即将上映
-        final static int TYPE_TOP_250 = 2;//TOP250
-
-        private List<SubjectsBean> list;
-        private int type;
-
-
-        public FilmSection(List<SubjectsBean> datas, int type) {
-            super(R.layout.layout_film_head, R.layout.layout_film_item);
-            this.type = type;
-            this.list = datas;
-        }
-
-        @Override
-        public int getContentItemsTotal() {
-            return list.size();
-        }
-
-        @Override
-        public RecyclerView.ViewHolder getItemViewHolder(View view) {
-            return new ItemViewHolder(view);
-        }
-
-        @Override
-        public RecyclerView.ViewHolder getHeaderViewHolder(View view)
-        {
-
-            return new HeadViewHolder(view);
-        }
-
-        @Override
-        public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-            SubjectsBean bean = list.get(position);
-            ImageUtil.displayImageByUrl(mActivity, bean.getImages().getLarge(), itemViewHolder.filmCover);
-            itemViewHolder.filmName.setText(bean.getTitle());
-            itemViewHolder.filmRating.setText(bean.getRating().getAverage() + "");
-            itemViewHolder.filmRatingBar.setRating(((float) (bean.getRating().getAverage() / 2)));
-//            itemViewHolder.filmNamesetText(mFilms.get(position).getTitle());
-//            setText(mFilms.get(position).getRating().getAverage() + "");
-//            setRating((float) (mFilms.get(position).getRating().getAverage() / 2));
-        }
-
-        @Override
-        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder) {
-            HeadViewHolder headViewHolder = ((HeadViewHolder) holder);
-            switch (type){
-                case TYPE_IN_THEATER:
-                    headViewHolder.filmHeadTvTitle.setText("正在热映");
-                    headViewHolder.filmHeadTvTitle2.setText("厦门");
-                    break;
-                default:
-                    headViewHolder.filmHeadTvTitle.setText("正在热映");
-                    headViewHolder.filmHeadTvTitle2.setText("厦门");
-                    break;
-            }
-        }
-
-
-        class HeadViewHolder extends RecyclerView.ViewHolder{
-            @BindView(R.id.film_head_tv_title)
-            BootstrapLabel filmHeadTvTitle;
-            @BindView(R.id.film_head_tv_title2)
-            BootstrapLabel filmHeadTvTitle2;
-
-            HeadViewHolder(View view) {
-                super(view);
-                ButterKnife.bind(this, view);
-            }
-        }
-
-        class ItemViewHolder extends RecyclerView.ViewHolder{
-            @BindView(R.id.film_cover)
-            ImageView filmCover;
-            @BindView(R.id.film_name)
-            TextView filmName;
-            @BindView(R.id.film_rating_bar)
-            RatingBar filmRatingBar;
-            @BindView(R.id.film_rating)
-            TextView filmRating;
-
-            ItemViewHolder(View view) {
-                super(view);
-                ButterKnife.bind(this, view);
-            }
-        }
-    }
+//    class FilmSection extends StatelessSection {
+//        final static int TYPE_IN_THEATER = 0;//正在热映
+//        final static int TYPE_COMING_SOON = 1;//即将上映
+//        final static int TYPE_TOP_250 = 2;//TOP250
+//
+//        private List<SubjectsBean> list;
+//        private int type;
+//
+//
+//        public FilmSection(List<SubjectsBean> datas, int type) {
+//            super(R.layout.layout_film_head, R.layout.layout_film_item);
+//            this.type = type;
+//            this.list = datas;
+//        }
+//
+//        @Override
+//        public int getContentItemsTotal() {
+//            return list.size();
+//        }
+//
+//        @Override
+//        public RecyclerView.ViewHolder getItemViewHolder(View view) {
+//            return new ItemViewHolder(view);
+//        }
+//
+//        @Override
+//        public RecyclerView.ViewHolder getHeaderViewHolder(View view)
+//        {
+//
+//            return new HeadViewHolder(view);
+//        }
+//
+//        @Override
+//        public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
+//            ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+//            SubjectsBean bean = list.get(position);
+//            ImageUtil.displayImageByUrl(mActivity, bean.getImages().getLarge(), itemViewHolder.filmCover);
+//            itemViewHolder.filmName.setText(bean.getTitle());
+//            itemViewHolder.filmRating.setText(bean.getRating().getAverage() + "");
+//            itemViewHolder.filmRatingBar.setRating(((float) (bean.getRating().getAverage() / 2)));
+////            itemViewHolder.filmNamesetText(mFilms.get(position).getTitle());
+////            setText(mFilms.get(position).getRating().getAverage() + "");
+////            setRating((float) (mFilms.get(position).getRating().getAverage() / 2));
+//        }
+//
+//        @Override
+//        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder) {
+//            HeadViewHolder headViewHolder = ((HeadViewHolder) holder);
+//            switch (type){
+//                case TYPE_IN_THEATER:
+//                    headViewHolder.filmHeadTvTitle.setText("正在热映");
+//                    headViewHolder.filmHeadTvTitle2.setText("厦门");
+//                    break;
+//                default:
+//                    headViewHolder.filmHeadTvTitle.setText("正在热映");
+//                    headViewHolder.filmHeadTvTitle2.setText("厦门");
+//                    break;
+//            }
+//        }
+//
+//
+//        class HeadViewHolder extends RecyclerView.ViewHolder{
+//            @BindView(R.id.film_head_tv_title)
+//            BootstrapLabel filmHeadTvTitle;
+//            @BindView(R.id.film_head_tv_title2)
+//            BootstrapLabel filmHeadTvTitle2;
+//
+//            HeadViewHolder(View view) {
+//                super(view);
+//                ButterKnife.bind(this, view);
+//            }
+//        }
+//
+//        class ItemViewHolder extends RecyclerView.ViewHolder{
+//            @BindView(R.id.film_cover)
+//            ImageView filmCover;
+//            @BindView(R.id.film_name)
+//            TextView filmName;
+//            @BindView(R.id.film_rating_bar)
+//            RatingBar filmRatingBar;
+//            @BindView(R.id.film_rating)
+//            TextView filmRating;
+//
+//            ItemViewHolder(View view) {
+//                super(view);
+//                ButterKnife.bind(this, view);
+//            }
+//        }
+//    }
 
 }

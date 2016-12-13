@@ -13,12 +13,15 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.DouBanApi;
 import com.botasky.cyberblack.network.response.FilmsResponse;
+import com.botasky.cyberblack.network.response.SubjectsBean;
 import com.botasky.cyberblack.util.ImageUtil;
+import com.botasky.cyberblack.view.section.StatelessSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +45,7 @@ public class FilmFragment extends BaseFragment {
     SwipeRefreshLayout filmRefresh;
 
 
-    private List<FilmsResponse.SubjectsBean> mFilms = new ArrayList<>();
+    private List<SubjectsBean> mFilms = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
     private Adapter adapter;
 
@@ -96,16 +99,16 @@ public class FilmFragment extends BaseFragment {
                 .getInTheaters()
                 .subscribeOn(Schedulers.io())//指定在io线程做Observeable的创建
                 .observeOn(Schedulers.io())//指定在io线程做map转换
-                .map(new Func1<FilmsResponse, List<FilmsResponse.SubjectsBean>>() {
+                .map(new Func1<FilmsResponse, List<SubjectsBean>>() {
                     @Override
-                    public List<FilmsResponse.SubjectsBean> call(FilmsResponse filmsResponse) {
+                    public List<SubjectsBean> call(FilmsResponse filmsResponse) {
                         return filmsResponse.getSubjects();
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者
-                .subscribe(new Action1<List<FilmsResponse.SubjectsBean>>() {
+                .subscribe(new Action1<List<SubjectsBean>>() {
                     @Override
-                    public void call(List<FilmsResponse.SubjectsBean> subjectsBeen) {
+                    public void call(List<SubjectsBean> subjectsBeen) {
                         Log.e("Films", "" + subjectsBeen.size());
                         //完成后设置刷新为false
                         mFilms.addAll(subjectsBeen);
@@ -145,7 +148,7 @@ public class FilmFragment extends BaseFragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = mLayoutInflater.inflate(R.layout.item_films_layout, parent, false);
+            View view = mLayoutInflater.inflate(R.layout.layout_film_item, parent, false);
             ItemViewHolder item = new ItemViewHolder(view);
             return item;
         }
@@ -175,6 +178,90 @@ public class FilmFragment extends BaseFragment {
                 film_name = (TextView) itemView.findViewById(R.id.film_name);
                 film_rate = (TextView) itemView.findViewById(R.id.film_rating);
                 film_rating_bar = (RatingBar) itemView.findViewById(R.id.film_rating_bar);
+            }
+        }
+    }
+
+
+    class FilmSection extends StatelessSection {
+        final static int TYPE_IN_THEATER = 0;//正在热映
+        final static int TYPE_COMING_SOON = 1;//即将上映
+        final static int TYPE_TOP_250 = 2;//TOP250
+
+        private List<SubjectsBean> list;
+        private int type;
+
+
+        public FilmSection(List<SubjectsBean> datas, int type) {
+            super(R.layout.layout_film_head, R.layout.layout_film_item);
+            this.list = datas;
+        }
+
+        @Override
+        public int getContentItemsTotal() {
+            return list.size();
+        }
+
+        @Override
+        public RecyclerView.ViewHolder getItemViewHolder(View view) {
+            return new ItemViewHolder(view);
+        }
+
+        @Override
+        public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
+            ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+            SubjectsBean bean = list.get(position);
+            ImageUtil.displayImageByUrl(mActivity, bean.getImages().getLarge(), itemViewHolder.filmCover);
+            itemViewHolder.filmName.setText(bean.getTitle());
+            itemViewHolder.filmRating.setText(bean.getRating().getAverage() + "");
+            itemViewHolder.filmRatingBar.setRating(((float) (bean.getRating().getAverage() / 2)));
+//            itemViewHolder.filmNamesetText(mFilms.get(position).getTitle());
+//            setText(mFilms.get(position).getRating().getAverage() + "");
+//            setRating((float) (mFilms.get(position).getRating().getAverage() / 2));
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder) {
+            super.onBindHeaderViewHolder(holder);
+            HeadViewHolder headViewHolder = ((HeadViewHolder) holder);
+            switch (type){
+                case TYPE_IN_THEATER:
+                    headViewHolder.filmHeadTvTitle.setText("正在热映");
+                    headViewHolder.filmHeadTvTitle2.setText("厦门");
+                    break;
+                default:
+                    headViewHolder.filmHeadTvTitle.setText("正在热映");
+                    headViewHolder.filmHeadTvTitle2.setText("厦门");
+                    break;
+            }
+        }
+
+
+        class HeadViewHolder extends RecyclerView.ViewHolder{
+            @BindView(R.id.film_head_tv_title)
+            BootstrapLabel filmHeadTvTitle;
+            @BindView(R.id.film_head_tv_title2)
+            BootstrapLabel filmHeadTvTitle2;
+
+            HeadViewHolder(View view) {
+                super(view);
+                ButterKnife.bind(this, view);
+            }
+        }
+
+        class ItemViewHolder extends RecyclerView.ViewHolder{
+            @BindView(R.id.film_cover)
+            ImageView filmCover;
+            @BindView(R.id.film_name)
+            TextView filmName;
+            @BindView(R.id.film_rating_bar)
+            RatingBar filmRatingBar;
+            @BindView(R.id.film_rating)
+            TextView filmRating;
+
+            ItemViewHolder(View view) {
+                super(view);
+                ButterKnife.bind(this, view);
             }
         }
     }

@@ -21,6 +21,7 @@ import com.botasky.cyberblack.network.api.DouBanApi;
 import com.botasky.cyberblack.network.response.FilmsResponse;
 import com.botasky.cyberblack.network.response.SubjectsBean;
 import com.botasky.cyberblack.util.ImageUtil;
+import com.botasky.cyberblack.view.section.SectionedRecyclerViewAdapter;
 import com.botasky.cyberblack.view.section.StatelessSection;
 
 import java.util.ArrayList;
@@ -49,6 +50,9 @@ public class FilmFragment extends BaseFragment {
     private LinearLayoutManager linearLayoutManager;
     private Adapter adapter;
 
+    private SectionedRecyclerViewAdapter mSectionAdapter;
+
+
     public static FilmFragment newInstance(String title) {
         Bundle bundle = new Bundle();
         bundle.putString(TITLE, title);
@@ -60,6 +64,7 @@ public class FilmFragment extends BaseFragment {
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
+        mSectionAdapter = new SectionedRecyclerViewAdapter();
         //swipeRefresh设置
         //设置刷新图标背景色
         filmRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
@@ -82,7 +87,7 @@ public class FilmFragment extends BaseFragment {
         linearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
         film_in_theaters_recyle.setHasFixedSize(true);
         film_in_theaters_recyle.setLayoutManager(linearLayoutManager);
-        film_in_theaters_recyle.setAdapter(adapter = new Adapter());
+        film_in_theaters_recyle.setAdapter(mSectionAdapter);
         getFimsInTheatersData();
 
 
@@ -111,8 +116,10 @@ public class FilmFragment extends BaseFragment {
                     public void call(List<SubjectsBean> subjectsBeen) {
                         Log.e("Films", "" + subjectsBeen.size());
                         //完成后设置刷新为false
-                        mFilms.addAll(subjectsBeen);
-                        adapter.notifyDataSetChanged();
+//                        mFilms.addAll(subjectsBeen);
+//                        adapter.notifyDataSetChanged();
+                        mSectionAdapter.addSection(new FilmSection(subjectsBeen, FilmSection.TYPE_IN_THEATER));
+                        mSectionAdapter.notifyDataSetChanged();
                         filmRefresh.setRefreshing(false);
                     }
                 });
@@ -194,6 +201,7 @@ public class FilmFragment extends BaseFragment {
 
         public FilmSection(List<SubjectsBean> datas, int type) {
             super(R.layout.layout_film_head, R.layout.layout_film_item);
+            this.type = type;
             this.list = datas;
         }
 
@@ -205,6 +213,13 @@ public class FilmFragment extends BaseFragment {
         @Override
         public RecyclerView.ViewHolder getItemViewHolder(View view) {
             return new ItemViewHolder(view);
+        }
+
+        @Override
+        public RecyclerView.ViewHolder getHeaderViewHolder(View view)
+        {
+
+            return new HeadViewHolder(view);
         }
 
         @Override
@@ -222,7 +237,6 @@ public class FilmFragment extends BaseFragment {
 
         @Override
         public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder) {
-            super.onBindHeaderViewHolder(holder);
             HeadViewHolder headViewHolder = ((HeadViewHolder) holder);
             switch (type){
                 case TYPE_IN_THEATER:

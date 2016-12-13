@@ -8,17 +8,6 @@
     android:paddingRight="5dp"
     android:paddingTop="5dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.beardedhen.androidbootstrap.BootstrapLabel
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/film_in_theaters"
-            app:bootstrapBrand="danger"
-            app:bootstrapHeading="h6"
-            app:roundedCorners="true" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/film_in_theaters_recyle"
@@ -27,7 +16,6 @@
             android:layout_marginTop="25dp">
 
         </android.support.v7.widget.RecyclerView>
-    </RelativeLayout>
 
 
     <!--<android.support.v4.widget.SwipeRefreshLayout-->

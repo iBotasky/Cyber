@@ -22,71 +22,57 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/film_rl_in_theaters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:visibility="gone">
 
-                <com.beardedhen.androidbootstrap.BootstrapLabel
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/film_in_theaters"
-                    app:bootstrapBrand="danger"
-                    app:bootstrapHeading="h6"
-                    app:roundedCorners="true" />
+                    android:textColor="@color/grey_900"
+                    android:textSize="30sp" />
 
-                <com.beardedhen.androidbootstrap.BootstrapLabel
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:text="位置"
-                    app:bootstrapBrand="primary"
-                    app:bootstrapHeading="h6"
-                    app:roundedCorners="true" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/film_in_theaters_recyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp">
+                    android:layout_marginTop="10dp"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 </android.support.v7.widget.RecyclerView>
-            </RelativeLayout>
+            </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/film_rl_coming_soon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/film_rl_in_theaters"
                 android:layout_marginTop="20dp"
+                android:orientation="vertical"
                 android:visibility="gone">
 
-                <com.beardedhen.androidbootstrap.BootstrapLabel
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="即将上映"
-                    app:bootstrapBrand="danger"
-                    app:bootstrapHeading="h6"
-                    app:roundedCorners="true" />
+                    android:text="@string/film_coming_soon"
+                    android:textColor="@color/grey_900"
+                    android:textSize="30sp" />
 
-                <com.beardedhen.androidbootstrap.BootstrapLabel
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:text="位置"
-                    app:bootstrapBrand="primary"
-                    app:bootstrapHeading="h6"
-                    app:roundedCorners="true" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/film_coming_soon_recyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp">
+                    android:layout_marginTop="10dp"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 </android.support.v7.widget.RecyclerView>
-            </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
 
 

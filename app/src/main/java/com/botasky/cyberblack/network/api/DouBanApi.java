@@ -19,5 +19,5 @@ public interface DouBanApi {
     Observable<FilmsResponse> getInTheaters();
 
     @GET("movie/coming_soon")
-    Observable<JsonObject> getComingSoon(@Query("start") int start, @Query("count") int count);//Get用参数Query来做
+    Observable<FilmsResponse> getComingSoon(@Query("start") int start, @Query("count") int count);//Get用参数Query来做
 }

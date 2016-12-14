@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,7 +20,6 @@ import com.botasky.cyberblack.network.api.DouBanApi;
 import com.botasky.cyberblack.network.response.FilmsResponse;
 import com.botasky.cyberblack.network.response.SubjectsBean;
 import com.botasky.cyberblack.util.ImageUtil;
-import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -42,9 +42,9 @@ public class FilmFragment extends BaseFragment {
     @BindView(R.id.film_coming_soon_recyle)
     RecyclerView filmComingSoonRecyle;
     @BindView(R.id.film_rl_in_theaters)
-    RelativeLayout filmRlInTheaters;
+    LinearLayout filmRlInTheaters;
     @BindView(R.id.film_rl_coming_soon)
-    RelativeLayout filmRlComingSoon;
+    LinearLayout filmRlComingSoon;
 
     //    private List<SubjectsBean> mFilms = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
@@ -115,20 +115,27 @@ public class FilmFragment extends BaseFragment {
                 .getComingSoon(0, 20)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(new Subscriber<JsonObject>() {
+                .map(new Func1<FilmsResponse, List<SubjectsBean>>() {
+                    @Override
+                    public List<SubjectsBean> call(FilmsResponse filmsResponse) {
+                        return filmsResponse.getSubjects();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<SubjectsBean>>() {
                     @Override
                     public void onCompleted() {
-                        Log.e("JSONOBJECT", " onComplete");
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("JSONOBJECT", " onError " + e);
                     }
 
                     @Override
-                    public void onNext(JsonObject jsonObject) {
-                        Log.e("JSONOBJECT", " " + jsonObject.toString());
+                    public void onNext(List<SubjectsBean> subjectsBeen) {
+                        filmRlComingSoon.setVisibility(View.VISIBLE);
+                        filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen));
                     }
                 });
     }

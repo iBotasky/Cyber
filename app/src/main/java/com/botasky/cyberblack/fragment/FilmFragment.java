@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.botasky.cyberblack.R;
@@ -18,11 +19,13 @@ import com.botasky.cyberblack.network.api.DouBanApi;
 import com.botasky.cyberblack.network.response.FilmsResponse;
 import com.botasky.cyberblack.network.response.SubjectsBean;
 import com.botasky.cyberblack.util.ImageUtil;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -38,6 +41,10 @@ public class FilmFragment extends BaseFragment {
     RecyclerView film_in_theaters_recyle;
     @BindView(R.id.film_coming_soon_recyle)
     RecyclerView filmComingSoonRecyle;
+    @BindView(R.id.film_rl_in_theaters)
+    RelativeLayout filmRlInTheaters;
+    @BindView(R.id.film_rl_coming_soon)
+    RelativeLayout filmRlComingSoon;
 
     //    private List<SubjectsBean> mFilms = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
@@ -93,13 +100,35 @@ public class FilmFragment extends BaseFragment {
                     public void call(List<SubjectsBean> subjectsBeen) {
                         Log.e("Films", "" + subjectsBeen.size());
                         //完成后设置刷新为false
+                        filmRlInTheaters.setVisibility(View.VISIBLE);
                         film_in_theaters_recyle.setAdapter(new Adapter(subjectsBeen));
-                        filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen));
+//                        filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen));
 //                        mFilms.addAll(subjectsBeen);
 //                        adapter.notifyDataSetChanged();
 //                        mSectionAdapter.addSection(new FilmSection(subjectsBeen, FilmSection.TYPE_IN_THEATER));
 //                        mSectionAdapter.notifyDataSetChanged();
 //                        filmRefresh.setRefreshing(false);
+                    }
+                });
+
+        httpHelper.getService(DouBanApi.class)
+                .getComingSoon(0, 20)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(new Subscriber<JsonObject>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.e("JSONOBJECT", " onComplete");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("JSONOBJECT", " onError " + e);
+                    }
+
+                    @Override
+                    public void onNext(JsonObject jsonObject) {
+                        Log.e("JSONOBJECT", " " + jsonObject.toString());
                     }
                 });
     }
@@ -143,10 +172,11 @@ public class FilmFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ImageUtil.displayImageByUrl(mActivity, datas.get(position).getImages().getLarge(), ((ItemViewHolder) holder).film_cover);
-            ((ItemViewHolder) holder).film_name.setText(datas.get(position).getTitle());
-            ((ItemViewHolder) holder).film_rate.setText(datas.get(position).getRating().getAverage() + "");
-            ((ItemViewHolder) holder).film_rating_bar.setRating((float) (datas.get(position).getRating().getAverage() / 2));
+            ItemViewHolder itemViewHolder = ((ItemViewHolder) holder);
+            ImageUtil.displayImageByUrl(mActivity, datas.get(position).getImages().getLarge(), itemViewHolder.film_cover);
+            itemViewHolder.film_name.setText(datas.get(position).getTitle());
+            itemViewHolder.film_rate.setText(datas.get(position).getRating().getAverage() + "");
+            itemViewHolder.film_rating_bar.setRating((float) (datas.get(position).getRating().getAverage() / 2));
         }
 
         @Override

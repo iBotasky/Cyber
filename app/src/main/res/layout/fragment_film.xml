@@ -23,9 +23,10 @@
             android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:id="@+id/film_rl_1"
+                android:id="@+id/film_rl_in_theaters"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <com.beardedhen.androidbootstrap.BootstrapLabel
                     android:layout_width="wrap_content"
@@ -54,10 +55,12 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/film_rl_coming_soon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/film_rl_1"
-                android:layout_marginTop="20dp">
+                android:layout_below="@id/film_rl_in_theaters"
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
 
                 <com.beardedhen.androidbootstrap.BootstrapLabel
                     android:layout_width="wrap_content"

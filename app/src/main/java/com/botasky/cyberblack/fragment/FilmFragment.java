@@ -101,13 +101,7 @@ public class FilmFragment extends BaseFragment {
                         Log.e("Films", "" + subjectsBeen.size());
                         //完成后设置刷新为false
                         filmRlInTheaters.setVisibility(View.VISIBLE);
-                        film_in_theaters_recyle.setAdapter(new Adapter(subjectsBeen));
-//                        filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen));
-//                        mFilms.addAll(subjectsBeen);
-//                        adapter.notifyDataSetChanged();
-//                        mSectionAdapter.addSection(new FilmSection(subjectsBeen, FilmSection.TYPE_IN_THEATER));
-//                        mSectionAdapter.notifyDataSetChanged();
-//                        filmRefresh.setRefreshing(false);
+                        film_in_theaters_recyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_IN_THEATER));
                     }
                 });
 
@@ -125,17 +119,19 @@ public class FilmFragment extends BaseFragment {
                 .subscribe(new Subscriber<List<SubjectsBean>>() {
                     @Override
                     public void onCompleted() {
-
+                        Log.e("FilmComingSoon", " onCOmplete" );
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.e("FilmComingSoon", " ERROR " + e);
                     }
 
                     @Override
                     public void onNext(List<SubjectsBean> subjectsBeen) {
+                        Log.e("FilmComingSoon", " " + subjectsBeen.size());
                         filmRlComingSoon.setVisibility(View.VISIBLE);
-                        filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen));
+                        filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_COMING_SOON));
                     }
                 });
     }
@@ -162,12 +158,18 @@ public class FilmFragment extends BaseFragment {
 
 
     private class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        private static final int FILM_TYPE_IN_THEATER = 0;
+        private static final int FILM_TYPE_COMING_SOON = 1;
+        private static final int FILM_TYPE_TOP_250 = 2;
+
         private LayoutInflater mLayoutInflater;
         private List<SubjectsBean> datas;
+        private int film_type;
 
-        private Adapter(List<SubjectsBean> datas) {
+        private Adapter(List<SubjectsBean> datas, int type) {
             this.mLayoutInflater = LayoutInflater.from(mActivity);
             this.datas = datas;
+            this.film_type = type;
         }
 
         @Override
@@ -180,10 +182,29 @@ public class FilmFragment extends BaseFragment {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ItemViewHolder itemViewHolder = ((ItemViewHolder) holder);
-            ImageUtil.displayImageByUrl(mActivity, datas.get(position).getImages().getLarge(), itemViewHolder.film_cover);
-            itemViewHolder.film_name.setText(datas.get(position).getTitle());
-            itemViewHolder.film_rate.setText(datas.get(position).getRating().getAverage() + "");
-            itemViewHolder.film_rating_bar.setRating((float) (datas.get(position).getRating().getAverage() / 2));
+            SubjectsBean bean = datas.get(position);
+            ImageUtil.displayImageByUrl(mActivity, bean.getImages().getLarge(), itemViewHolder.film_cover);
+            itemViewHolder.film_name.setText(bean.getTitle());
+
+            switch (film_type) {
+                case FILM_TYPE_IN_THEATER:
+                case FILM_TYPE_TOP_250:
+                    itemViewHolder.film_ll_rating.setVisibility(View.VISIBLE);
+                    itemViewHolder.film_rate.setText(bean.getRating().getAverage() + "");
+                    itemViewHolder.film_rating_bar.setRating((float) (bean.getRating().getAverage() / 2));
+                    break;
+                case FILM_TYPE_COMING_SOON:
+                    itemViewHolder.film_ll_type.setVisibility(View.VISIBLE);
+                    String type = "";
+                    for (int i = 0; i < bean.getGenres().size(); i ++) {
+                        type = type + bean.getGenres().get(i);
+                        if (i != bean.getGenres().size()-1)
+                            type += "/";
+                    }
+                    itemViewHolder.film_tv_type.setText(type);
+                    break;
+
+            }
         }
 
         @Override
@@ -196,13 +217,20 @@ public class FilmFragment extends BaseFragment {
             TextView film_name;
             TextView film_rate;
             RatingBar film_rating_bar;
+            LinearLayout film_ll_rating;
+            LinearLayout film_ll_type;
+            TextView film_tv_type;
 
             public ItemViewHolder(View itemView) {
                 super(itemView);
                 film_cover = (ImageView) itemView.findViewById(R.id.film_cover);
                 film_name = (TextView) itemView.findViewById(R.id.film_name);
+                film_ll_rating = (LinearLayout) itemView.findViewById(R.id.film_ll_rating);
                 film_rate = (TextView) itemView.findViewById(R.id.film_rating);
                 film_rating_bar = (RatingBar) itemView.findViewById(R.id.film_rating_bar);
+                film_ll_type = (LinearLayout) itemView.findViewById(R.id.film_ll_type);
+                film_tv_type = (TextView) itemView.findViewById(R.id.film_tv_type);
+
             }
         }
     }

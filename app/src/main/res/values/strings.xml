@@ -7,4 +7,5 @@
     <string name="loading">上滑加载</string>
     <string name="film_in_theaters">正在热映</string>
     <string name="film_coming_soon">即将上映</string>
+    <string name="film_top_250">电影Top250</string>
 </resources>

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.botasky.cyberblack.R;
@@ -45,6 +44,10 @@ public class FilmFragment extends BaseFragment {
     LinearLayout filmRlInTheaters;
     @BindView(R.id.film_rl_coming_soon)
     LinearLayout filmRlComingSoon;
+    @BindView(R.id.film_top_250_recyle_view)
+    RecyclerView filmTop250Recyle;
+    @BindView(R.id.film_ll_top_250)
+    LinearLayout filmLlTop250;
 
     //    private List<SubjectsBean> mFilms = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
@@ -62,26 +65,26 @@ public class FilmFragment extends BaseFragment {
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
-//        adapter = new Adapter();
         //RecyleView设置
-        linearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager inTheater = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
         film_in_theaters_recyle.setHasFixedSize(true);
-        film_in_theaters_recyle.setLayoutManager(linearLayoutManager);
+        film_in_theaters_recyle.setLayoutManager(inTheater);
 
         LinearLayoutManager comingsoon = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
         filmComingSoonRecyle.setHasFixedSize(true);
         filmComingSoonRecyle.setLayoutManager(comingsoon);
-//        film_in_theaters_recyle.setAdapter(adapter);
-        getFimsInTheatersData();
 
+        LinearLayoutManager top250 = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
+        filmTop250Recyle.setHasFixedSize(true);
+        filmTop250Recyle.setLayoutManager(top250);
 
+        getFimsData();
     }
 
     /**
      * 获取正在热映的电影
      */
-    private void getFimsInTheatersData() {
-//        filmRefresh.setRefreshing(true);
+    private void getFimsData() {
         HttpHelper httpHelper = new HttpHelper();
         httpHelper.setEnd_points(Urls.DOU_BAN_HOST);
         httpHelper.getService(DouBanApi.class)
@@ -119,7 +122,7 @@ public class FilmFragment extends BaseFragment {
                 .subscribe(new Subscriber<List<SubjectsBean>>() {
                     @Override
                     public void onCompleted() {
-                        Log.e("FilmComingSoon", " onCOmplete" );
+                        Log.e("FilmComingSoon", " onCOmplete");
                     }
 
                     @Override
@@ -132,6 +135,36 @@ public class FilmFragment extends BaseFragment {
                         Log.e("FilmComingSoon", " " + subjectsBeen.size());
                         filmRlComingSoon.setVisibility(View.VISIBLE);
                         filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_COMING_SOON));
+                    }
+                });
+
+        httpHelper.getService(DouBanApi.class)
+                .getTop250(0,20)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.immediate())
+                .map(new Func1<FilmsResponse, List<SubjectsBean>>() {
+                    @Override
+                    public List<SubjectsBean> call(FilmsResponse filmsResponse) {
+                        return filmsResponse.getSubjects();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<SubjectsBean>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("FilmTop250", " ERROR " + e);
+                    }
+
+                    @Override
+                    public void onNext(List<SubjectsBean> subjectsBeen) {
+                        Log.e("FilmTop250", " " + subjectsBeen.size());
+                        filmLlTop250.setVisibility(View.VISIBLE);
+                        filmTop250Recyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_TOP_250));
                     }
                 });
     }
@@ -196,9 +229,9 @@ public class FilmFragment extends BaseFragment {
                 case FILM_TYPE_COMING_SOON:
                     itemViewHolder.film_ll_type.setVisibility(View.VISIBLE);
                     String type = "";
-                    for (int i = 0; i < bean.getGenres().size(); i ++) {
+                    for (int i = 0; i < bean.getGenres().size(); i++) {
                         type = type + bean.getGenres().get(i);
-                        if (i != bean.getGenres().size()-1)
+                        if (i != bean.getGenres().size() - 1)
                             type += "/";
                     }
                     itemViewHolder.film_tv_type.setText(type);

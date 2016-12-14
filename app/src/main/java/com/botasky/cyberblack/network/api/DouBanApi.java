@@ -20,4 +20,7 @@ public interface DouBanApi {
 
     @GET("movie/coming_soon")
     Observable<FilmsResponse> getComingSoon(@Query("start") int start, @Query("count") int count);//Get用参数Query来做
+
+    @GET("movie/top250")
+    Observable<FilmsResponse> getTop250(@Query("start") int start, @Query("count") int connt);
 }

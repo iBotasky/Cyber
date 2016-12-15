@@ -1,5 +1,7 @@
 package com.botasky.cyberblack.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,12 +20,14 @@ import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.GirlsApi;
 import com.botasky.cyberblack.network.response.GirlsResponse;
+import com.botasky.cyberblack.util.ImageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -44,7 +48,8 @@ public class GirlsFragment extends BaseFragment {
     LinearLayoutManager linearLayoutManager;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     RefreshRecyclerAdapter adapter;
-    private int lastVisibleItem;
+    private int[] lastVisibleItem;
+    private int lastVisibleItemPosition;
     private int page = 1;
 
 
@@ -87,10 +92,10 @@ public class GirlsFragment extends BaseFragment {
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
                         .getDisplayMetrics()));
         //设置LinearLayoutManager
-        linearLayoutManager = new LinearLayoutManager(mActivity);
-        linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
-//        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-        girlsRecyle.setLayoutManager(linearLayoutManager);
+//        linearLayoutManager = new LinearLayoutManager(mActivity);
+//        linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        girlsRecyle.setLayoutManager(staggeredGridLayoutManager);
         //设置Adapter
         girlsRecyle.setAdapter(adapter = new RefreshRecyclerAdapter(mActivity));
         //第一次去访问初始化数据
@@ -125,7 +130,7 @@ public class GirlsFragment extends BaseFragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount()) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition + 1 == adapter.getItemCount()) {
                     adapter.changeLoadStatus(RefreshRecyclerAdapter.LOADING_MORE);
                     getData();
                 }
@@ -138,11 +143,27 @@ public class GirlsFragment extends BaseFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//                staggeredGridLayoutManager.findLastVisibleItemPositions()
+                if (lastVisibleItem == null) {
+                    lastVisibleItem = new int[staggeredGridLayoutManager.getSpanCount()];
+                }
+                staggeredGridLayoutManager.findLastVisibleItemPositions(lastVisibleItem);
+                lastVisibleItemPosition = findMax(lastVisibleItem);
             }
         });
 
     }
+
+    private int findMax(int[] A){
+        int size = A.length;
+        int max = 0;
+        for (int i = 0; i < size ; i++){
+            max = max >= A[i] ? max : A[i];
+        }
+        return max;
+    }
+
 
     private void getData() {
         //Rxjava map是一对一的转换， flatmap是一对多的转换，这里z还需要得到一个list，就可以，所以用map
@@ -153,30 +174,38 @@ public class GirlsFragment extends BaseFragment {
                 .getGirls(page)
                 .subscribeOn(Schedulers.io())//指定在io线程创建爱你Observable
                 .observeOn(Schedulers.io())//指定在io线程做变换操作
-                .map(new Func1<GirlsResponse, List<GirlsResponse.ResultsBean>>() {
+                .flatMap(new Func1<GirlsResponse, Observable<GirlsResponse.ResultsBean>>() {
                     @Override
-                    public List<GirlsResponse.ResultsBean> call(GirlsResponse girlsResponse) {
-                        return girlsResponse.getResults();
+                    public Observable<GirlsResponse.ResultsBean> call(GirlsResponse girlsResponse) {
+                        return Observable.from(girlsResponse.getResults());
+                    }
+                })
+                .flatMap(new Func1<GirlsResponse.ResultsBean, Observable<GirlsResponse.ResultsBean>>() {
+                    @Override
+                    public Observable<GirlsResponse.ResultsBean> call(GirlsResponse.ResultsBean resultsBean) {
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inJustDecodeBounds = true;
+                        ImageUtil.returnBitMap(resultsBean.getUrl(), options);
+                        resultsBean.setHeight(options.outHeight);
+                        resultsBean.setWith(options.outWidth);
+                        return Observable.just(resultsBean);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者操作
-                .subscribe(new Subscriber<List<GirlsResponse.ResultsBean>>() {
+                .subscribe(new Subscriber<GirlsResponse.ResultsBean>() {
                     @Override
                     public void onCompleted() {
-                        Log.e("GetGirls ", "onComplete");
                         adapter.addMoreItem(data);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("GetGirls ", "onError " + e);
 
                     }
 
                     @Override
-                    public void onNext(List<GirlsResponse.ResultsBean> resultsBean) {
-                        Log.e("GetGirls ", "onNext "  + resultsBean);
-                        data.addAll(resultsBean);
+                    public void onNext(GirlsResponse.ResultsBean resultsBean) {
+                        data.add(resultsBean);
                     }
                 });
         page += 1;

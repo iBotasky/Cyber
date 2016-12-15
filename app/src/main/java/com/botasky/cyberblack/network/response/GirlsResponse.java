@@ -55,6 +55,25 @@ public class GirlsResponse {
         private boolean used;
         private String who;
 
+        private int height;
+        private int with;
+
+        public int getHeight() {
+            return height;
+        }
+
+        public void setHeight(int height) {
+            this.height = height;
+        }
+
+        public int getWith() {
+            return with;
+        }
+
+        public void setWith(int with) {
+            this.with = with;
+        }
+
         public void set_id(String _id) {
             this._id = _id;
         }

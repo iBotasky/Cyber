@@ -5,11 +5,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.network.response.GirlsResponse;
+import com.botasky.cyberblack.util.AppUtil;
+import com.botasky.cyberblack.util.DisplaytUtil;
 import com.botasky.cyberblack.util.ImageUtil;
 
 import java.util.ArrayList;
@@ -22,7 +26,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOT = 1;
-
+    private static final int IMAGE_WITH = DisplaytUtil.getScreenWith() / 2 ;
     private int load_more_status = 0;
     //上拉加载更多
     public static final int PULLUP_LOAD_MORE = 0;
@@ -72,9 +76,12 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
-//            ((ItemViewHolder) holder).girls_iv.setText(mTitles.get(position));
-            ImageUtil.displayImageByUrl(mContext, mBeans.get(position).getUrl(), ((ItemViewHolder) holder).girls_iv);
-            ((ItemViewHolder) holder).girls_tv.setText("From: GankIO " + " Create By:"+ mBeans.get(position).getWho() );
+            ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+            int with = IMAGE_WITH;
+            int height = (with * mBeans.get(position).getHeight() / mBeans.get(position).getWith());
+
+            itemViewHolder.girls_iv.setLayoutParams(new FrameLayout.LayoutParams(with, height));
+            ImageUtil.displayImageByUrl(mContext, mBeans.get(position).getUrl(), itemViewHolder.girls_iv, with, height);
             holder.itemView.setTag(position);
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
@@ -107,12 +114,12 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     //自定义的ViewHolder，持有每个Item的的所有界面元素
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         public ImageView girls_iv;
-        public TextView girls_tv;
+//        public TextView girls_tv;
 
         public ItemViewHolder(View view) {
             super(view);
             girls_iv = (ImageView) view.findViewById(R.id.girls_iv);
-            girls_tv = (TextView) view.findViewById(R.id.girls_tv);
+//            girls_tv = (TextView) view.findViewById(R.id.girls_tv);
         }
     }
 

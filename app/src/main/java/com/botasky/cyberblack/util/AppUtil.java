@@ -19,7 +19,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
+import com.botasky.cyberblack.CyberApplication;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -599,7 +602,7 @@ public class AppUtil {
         String versionName = "";
         try {
             PackageManager packageManager = context.getPackageManager();
-            PackageInfo packageInfo = packageManager.getPackageInfo("com.runmaf.mobile", 0);
+            PackageInfo packageInfo = packageManager.getPackageInfo("com.botasky.cyberblack", 0);
             versionName = packageInfo.versionName;
             if (null == versionName) {
                 return "";
@@ -609,4 +612,6 @@ public class AppUtil {
         }
         return versionName;
     }
+
+
 }

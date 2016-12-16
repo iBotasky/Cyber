@@ -183,11 +183,9 @@ public class GirlsFragment extends BaseFragment {
                 .flatMap(new Func1<GirlsResponse.ResultsBean, Observable<GirlsResponse.ResultsBean>>() {
                     @Override
                     public Observable<GirlsResponse.ResultsBean> call(GirlsResponse.ResultsBean resultsBean) {
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inJustDecodeBounds = true;
-                        ImageUtil.returnBitMap(resultsBean.getUrl(), options);
-                        resultsBean.setHeight(options.outHeight);
-                        resultsBean.setWith(options.outWidth);
+                        int[] bounds = ImageUtil.returnBitMapBounds(resultsBean.getUrl());
+                        resultsBean.setWith(bounds[0]);
+                        resultsBean.setHeight(bounds[1]);
                         return Observable.just(resultsBean);
                     }
                 })

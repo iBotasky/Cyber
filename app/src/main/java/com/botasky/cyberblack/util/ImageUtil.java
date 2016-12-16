@@ -3,6 +3,7 @@ package com.botasky.cyberblack.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.widget.ImageView;
 
 import com.botasky.cyberblack.R;
@@ -82,10 +83,11 @@ public class ImageUtil {
      * @param url
      * @return bitmap type
      */
-    public final static Bitmap returnBitMap(String url, BitmapFactory.Options options) {
+    public final static int[] returnBitMapBounds(String url) {
         URL myFileUrl = null;
-        Bitmap bitmap = null;
-
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        int[] bounds = new int[]{0,0};
         try {
             myFileUrl = new URL(url);
             HttpURLConnection conn;
@@ -94,8 +96,9 @@ public class ImageUtil {
             conn.setDoInput(true);
             conn.connect();
             InputStream is = conn.getInputStream();
-            bitmap = BitmapFactory.decodeStream(is, null,options);
-
+            BitmapFactory.decodeStream(is, null, options);
+            bounds[0] = options.outWidth;
+            bounds[1] = options.outHeight;
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -103,6 +106,6 @@ public class ImageUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return bitmap;
+        return bounds;
     }
 }

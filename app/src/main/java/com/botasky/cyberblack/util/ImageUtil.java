@@ -79,9 +79,9 @@ public class ImageUtil {
 
 
     /**
-     * return a bitmap from service
+     * return a bitmap bounds from service
      * @param url
-     * @return bitmap type
+     * @return bitmap with and height
      */
     public final static int[] returnBitMapBounds(String url) {
         URL myFileUrl = null;

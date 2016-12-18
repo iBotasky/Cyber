@@ -108,4 +108,84 @@ public class ImageUtil {
         }
         return bounds;
     }
+
+
+
+    public static void displayWeather(Context context, int img, ImageView imageView){
+        int resourceId = 0;
+        switch (img){
+            case 0:
+                resourceId = R.drawable.w_sunny;
+                break;
+            case 1:
+                resourceId = R.drawable.w_cloundy;
+                break;
+            case 2:
+                resourceId = R.drawable.w_yin;
+                break;
+            case 3:
+            case 4:
+                resourceId = R.drawable.w_rain_thunder;
+                break;
+            case 5:
+            case 19:
+                resourceId = R.drawable.w_rain_bao;
+                break;
+            case 6:
+                resourceId = R.drawable.w_rain_snow;
+                break;
+            case 7:
+                resourceId = R.drawable.w_rain_s;
+                break;
+            case 8:
+            case 21:
+                resourceId = R.drawable.w_rain_m;
+                break;
+            case 9:
+            case 22:
+                resourceId = R.drawable.w_rain_l;
+                break;
+            case 10:
+            case 23:
+                resourceId = R.drawable.w_rain_xl;
+                break;
+            case 11:
+            case 12:
+            case 24:
+            case 25:
+                resourceId = R.drawable.w_rain_xxl;
+                break;
+            case 13:
+            case 15:
+            case 27:
+                resourceId = R.drawable.w_snow_m;
+                break;
+            case 14:
+            case 26:
+                resourceId = R.drawable.w_snow_s;
+                break;
+            case 16:
+            case 17:
+            case 28:
+                resourceId = R.drawable.w_snow_l;
+                break;
+            case 18:
+                resourceId = R.drawable.w_fog;
+                break;
+            case 20:
+                resourceId = R.drawable.w_sand;
+                break;
+            case 53:
+                resourceId = R.drawable.w_fog_big;
+                break;
+            default:
+                resourceId = R.drawable.w_unknow;
+                break;
+        }
+
+        Glide.with(context)
+                .load(resourceId)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(imageView);
+    }
 }

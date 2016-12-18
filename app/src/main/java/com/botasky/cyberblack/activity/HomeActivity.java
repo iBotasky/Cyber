@@ -1,6 +1,9 @@
 package com.botasky.cyberblack.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -16,19 +19,28 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.botasky.cyberblack.R;
+import com.botasky.cyberblack.constant.Constant;
+import com.botasky.cyberblack.entity.LocWeatherBean;
 import com.botasky.cyberblack.fragment.BaseFragment;
 import com.botasky.cyberblack.fragment.FilmFragment;
 import com.botasky.cyberblack.fragment.GirlsFragment;
 import com.botasky.cyberblack.fragment.ReadingFragment;
 import com.botasky.cyberblack.fragment.SplashFragment;
+import com.botasky.cyberblack.service.CyberService;
+import com.botasky.cyberblack.util.ImageUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -88,6 +100,10 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+
+    //接收的广播
+    private Receiver mReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +115,18 @@ public class HomeActivity extends BaseActivity {
         mHandler.postDelayed(new DelayRunnable(this, splashFragment), 4000);
         ButterKnife.bind(this);
         initViews();
+
+        //广播初始化
+        mReceiver = new Receiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constant.WEATHER_BROCAST);
+        registerReceiver(mReceiver, intentFilter);
+
+        //启动后台进程
+        Intent toService = new Intent(HomeActivity.this, CyberService.class);
+        toService.putExtra(CyberService.SERVICE_COMMAND, CyberService.SERVICE_COMMAND_START_LOC_FOR_WEAHTER);
+        startService(toService);
+
     }
 
     @Override
@@ -209,6 +237,25 @@ public class HomeActivity extends BaseActivity {
     }
 
 
+    //获取并展示天气
+    private void showWeather(Intent intent){
+        LocWeatherBean locWeatherBean = intent.getParcelableExtra(Constant.WEATHER_KEY);
+        if (locWeatherBean != null){
+            LinearLayout home_ll_location = (LinearLayout) homeNav.findViewById(R.id.home_ll_location);
+            LinearLayout home_ll_weather = (LinearLayout) homeNav.findViewById(R.id.home_ll_weather);
+            TextView home_tv_loc = (TextView) homeNav.findViewById(R.id.home_tv_loc);
+            ImageView home_iv_weather = (ImageView) homeNav.findViewById(R.id.home_iv_weather);
+            TextView home_tv_weather = (TextView) homeNav.findViewById(R.id.home_tv_weather);
+
+            home_ll_location.setVisibility(View.VISIBLE);
+            home_ll_weather.setVisibility(View.VISIBLE);
+            home_tv_loc.setText(locWeatherBean.getCity_name());
+            ImageUtil.displayWeather(this, locWeatherBean.getImg(), home_iv_weather);
+            home_tv_weather.setText(locWeatherBean.getInfo() + " " + locWeatherBean.getTemperature() + "°");
+        }
+    }
+
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -223,5 +270,25 @@ public class HomeActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
 
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
+    }
+
+    private class Receiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int intentKey = intent.getIntExtra(Constant.BROADCAST_KEY, 0);
+            Log.e("HomeReceiver", " onReceiver" + intentKey);
+            switch (intentKey){
+                case Constant.WEATHER_BROCAST_KEY:
+                    showWeather(intent);
+            }
+        }
     }
 }

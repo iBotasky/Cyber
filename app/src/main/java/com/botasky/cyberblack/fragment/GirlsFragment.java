@@ -167,6 +167,7 @@ public class GirlsFragment extends BaseFragment {
 
     private void getData() {
         //Rxjava map是一对一的转换， flatmap是一对多的转换，这里z还需要得到一个list，就可以，所以用map
+        girlsSwipeRefresh.setRefreshing(true);
         final List<GirlsResponse.ResultsBean> data = new ArrayList<>();
         HttpHelper httpHelper = new HttpHelper();
         httpHelper.setEnd_points(Urls.GANK_IO_HOST);
@@ -193,12 +194,13 @@ public class GirlsFragment extends BaseFragment {
                 .subscribe(new Subscriber<GirlsResponse.ResultsBean>() {
                     @Override
                     public void onCompleted() {
+                        girlsSwipeRefresh.setRefreshing(false);
                         adapter.addMoreItem(data);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        girlsSwipeRefresh.setRefreshing(false);
                     }
 
                     @Override

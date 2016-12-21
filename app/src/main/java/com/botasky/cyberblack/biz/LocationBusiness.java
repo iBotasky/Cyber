@@ -97,9 +97,9 @@ public class LocationBusiness {
                                     .getWeather(s, Constant.WEATHER_API_KEY);
                         }
                     })
-                    .flatMap(new Func1<JsonObject, Observable<LocWeatherBean>>() {
+                    .map(new Func1<JsonObject, LocWeatherBean>() {
                         @Override
-                        public Observable<LocWeatherBean> call(JsonObject jsonObject) {
+                        public LocWeatherBean call(JsonObject jsonObject) {
                             LocWeatherBean locWeatherBean = new LocWeatherBean();
                             JsonObject result = jsonObject.getAsJsonObject("result");
                             JsonObject data = result.getAsJsonObject("data");
@@ -109,7 +109,7 @@ public class LocationBusiness {
                             locWeatherBean.setImg(Integer.valueOf(weather.get("img").getAsString()));
                             locWeatherBean.setInfo(weather.get("info").getAsString());
                             locWeatherBean.setTemperature(Integer.valueOf(weather.get("temperature").getAsString()));
-                            return Observable.just(locWeatherBean);
+                            return locWeatherBean;
                         }
                     })
                     .observeOn(AndroidSchedulers.mainThread())

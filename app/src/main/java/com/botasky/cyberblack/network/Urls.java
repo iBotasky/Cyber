@@ -14,4 +14,7 @@ public class Urls {
 
     //聚合数据天气APIHOSt
     public static final String WEATHRE_HOST = "http://op.juhe.cn";
+
+    //知乎日报HOST
+    public static final String ZHI_HU_HOST = "http://news-at.zhihu.com";
 }

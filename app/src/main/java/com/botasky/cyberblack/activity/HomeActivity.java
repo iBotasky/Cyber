@@ -198,7 +198,7 @@ public class HomeActivity extends BaseActivity {
 
     private void setupViewPager() {
         FilmFragment filmFragment = FilmFragment.newInstance("电影");
-        ReadingFragment readingFragment = ReadingFragment.newInstance("阅读");
+        ReadingFragment readingFragment = ReadingFragment.newInstance("知乎");
         GirlsFragment girlsFragment = GirlsFragment.newInstance("妹子");
         Adapter adapter = new Adapter(getSupportFragmentManager());
 

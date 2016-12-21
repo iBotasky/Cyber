@@ -11,6 +11,7 @@ import com.botasky.cyberblack.CyberApplication;
 import com.botasky.cyberblack.constant.Constant;
 import com.botasky.cyberblack.entity.LocWeatherBean;
 import com.botasky.cyberblack.network.HttpHelper;
+import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.JuHeDataApi;
 import com.google.gson.JsonObject;
 
@@ -84,12 +85,18 @@ public class LocationBusiness {
         @Override
         public void onLocationChanged(AMapLocation aMapLocation) {
             // TODO: 18/12/2016 获取天气发送到前台;完成后关掉定位
-            HttpHelper httpHelper = new HttpHelper();
-            httpHelper.setEnd_points("http://op.juhe.cn");
-            httpHelper.getService(JuHeDataApi.class)
-                    .getWeather(aMapLocation.getCity(), Constant.WEATHER_API_KEY)
+            Observable.just(aMapLocation.getCity())
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(Schedulers.immediate())
+                    .flatMap(new Func1<String, Observable<JsonObject>>() {
+                        @Override
+                        public Observable<JsonObject> call(String s) {
+                            HttpHelper httpHelper = new HttpHelper();
+                            httpHelper.setEnd_points(Urls.WEATHRE_HOST);
+                            return httpHelper.getService(JuHeDataApi.class)
+                                    .getWeather(s, Constant.WEATHER_API_KEY);
+                        }
+                    })
                     .flatMap(new Func1<JsonObject, Observable<LocWeatherBean>>() {
                         @Override
                         public Observable<LocWeatherBean> call(JsonObject jsonObject) {
@@ -118,15 +125,14 @@ public class LocationBusiness {
                         }
 
                         @Override
-                        public void onNext(LocWeatherBean bean) {
+                        public void onNext(LocWeatherBean locWeatherBean) {
                             Log.e("HomeReceiver", " onNext");
                             Intent send = new Intent(Constant.WEATHER_BROCAST);
-                            send.putExtra(Constant.WEATHER_KEY, bean);
+                            send.putExtra(Constant.WEATHER_KEY, locWeatherBean);
                             send.putExtra(Constant.BROADCAST_KEY,Constant.WEATHER_BROCAST_KEY);
                             CyberApplication.getInstance().getmContext().sendBroadcast(send);
                         }
                     });
-
         }
     }
 

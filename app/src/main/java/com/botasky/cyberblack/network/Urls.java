@@ -11,4 +11,7 @@ public class Urls {
 
     //豆瓣API的HOST
     public static final String DOU_BAN_HOST = "https://api.douban.com/v2/";
+
+    //聚合数据天气APIHOSt
+    public static final String WEATHRE_HOST = "http://op.juhe.cn";
 }

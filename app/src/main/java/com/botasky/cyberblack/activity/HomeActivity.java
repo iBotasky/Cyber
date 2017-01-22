@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -19,7 +18,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -165,32 +163,29 @@ public class HomeActivity extends BaseActivity {
 
 
     private void setupDrawerContent() {
-        homeNav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                item.setCheckable(true);
-                switch (item.getItemId()) {
-                    case R.id.nav_film:
-                        homeViewPager.setCurrentItem(0);
-                        homeDrawer.closeDrawers();
-                        break;
-                    case R.id.nav_reading:
-                        homeViewPager.setCurrentItem(1);
-                        homeDrawer.closeDrawers();
-                        break;
-                    case R.id.nav_girls:
-                        homeViewPager.setCurrentItem(2);
-                        homeDrawer.closeDrawers();
-                        break;
-                    case R.id.nav_account:
-                        break;
-                    case R.id.nav_link1:
-                        break;
-                    case R.id.nav_link2:
-                        break;
-                }
-                return true;
+        homeNav.setNavigationItemSelectedListener(item -> {
+            item.setCheckable(true);
+            switch (item.getItemId()) {
+                case R.id.nav_film:
+                    homeViewPager.setCurrentItem(0);
+                    homeDrawer.closeDrawers();
+                    break;
+                case R.id.nav_reading:
+                    homeViewPager.setCurrentItem(1);
+                    homeDrawer.closeDrawers();
+                    break;
+                case R.id.nav_girls:
+                    homeViewPager.setCurrentItem(2);
+                    homeDrawer.closeDrawers();
+                    break;
+                case R.id.nav_account:
+                    break;
+                case R.id.nav_link1:
+                    break;
+                case R.id.nav_link2:
+                    break;
             }
+            return true;
         });
 
     }
@@ -238,9 +233,9 @@ public class HomeActivity extends BaseActivity {
 
 
     //获取并展示天气
-    private void showWeather(Intent intent){
+    private void showWeather(Intent intent) {
         LocWeatherBean locWeatherBean = intent.getParcelableExtra(Constant.WEATHER_KEY);
-        if (locWeatherBean != null){
+        if (locWeatherBean != null) {
             LinearLayout home_ll_location = (LinearLayout) homeNav.findViewById(R.id.home_ll_location);
             LinearLayout home_ll_weather = (LinearLayout) homeNav.findViewById(R.id.home_ll_weather);
             TextView home_tv_loc = (TextView) homeNav.findViewById(R.id.home_tv_loc);
@@ -273,19 +268,18 @@ public class HomeActivity extends BaseActivity {
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mReceiver);
     }
 
-    private class Receiver extends BroadcastReceiver{
+    private class Receiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             int intentKey = intent.getIntExtra(Constant.BROADCAST_KEY, 0);
             Log.e("HomeReceiver", " onReceiver" + intentKey);
-            switch (intentKey){
+            switch (intentKey) {
                 case Constant.WEATHER_BROCAST_KEY:
                     showWeather(intent);
             }

@@ -92,8 +92,6 @@ public class GirlsFragment extends BaseFragment {
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
                         .getDisplayMetrics()));
         //设置LinearLayoutManager
-//        linearLayoutManager = new LinearLayoutManager(mActivity);
-//        linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         girlsRecyle.setLayoutManager(staggeredGridLayoutManager);
         //设置Adapter
@@ -101,26 +99,7 @@ public class GirlsFragment extends BaseFragment {
         //第一次去访问初始化数据
         getData();
         //设置下拉刷新
-        girlsSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // TODO: 30/11/2016 后面整改逻辑
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        List<String> newDatas = new ArrayList<String>();
-//                        for (int i = 0; i < 5; i++) {
-//                            int index = i + 1;
-//                            newDatas.add("new item" + index);
-//                        }
-//                        adapter.addItem(newDatas);
-//                        girlsSwipeRefresh.setRefreshing(false);
-//                        Toast.makeText(mActivity, "更新了五条数据...", Toast.LENGTH_SHORT).show();
-//                    }
-//                }, 5000);
-                girlsSwipeRefresh.setRefreshing(false);
-            }
-        });
+        girlsSwipeRefresh.setOnRefreshListener(() -> girlsSwipeRefresh.setRefreshing(false));
 
         //设置RecyleView滑动监听
         girlsRecyle.addOnScrollListener(new RecyclerView.OnScrollListener() {

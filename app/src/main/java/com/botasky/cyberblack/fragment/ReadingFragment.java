@@ -4,25 +4,27 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.ZhiHuDailyApi;
-import com.botasky.cyberblack.network.response.DailyResponse;
 import com.botasky.cyberblack.network.response.DailyStories;
+import com.botasky.cyberblack.util.ImageUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -30,12 +32,16 @@ import rx.schedulers.Schedulers;
  */
 
 public class ReadingFragment extends BaseFragment {
-
+    public static final String TAG = "ReadingFragment";
 
     @BindView(R.id.read_rv)
     RecyclerView readRv;
     @BindView(R.id.read_srl)
     SwipeRefreshLayout readSrl;
+
+
+    private ReadAdapter adapter;
+    private List<DailyStories> mStories;
 
     public static ReadingFragment newInstance(String args) {
         Bundle bundle = new Bundle();
@@ -68,13 +74,13 @@ public class ReadingFragment extends BaseFragment {
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
                         .getDisplayMetrics()));
         readSrl.setRefreshing(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         readRv.setLayoutManager(linearLayoutManager);
         getReadDatas();
 
     }
 
-    private void getReadDatas(){
+    private void getReadDatas() {
         HttpHelper httpHelper = new HttpHelper();
         httpHelper.setEnd_points(Urls.ZHI_HU_HOST);
         httpHelper.getService(ZhiHuDailyApi.class)
@@ -84,15 +90,19 @@ public class ReadingFragment extends BaseFragment {
                 .map(dailyResponse -> dailyResponse.getStories())
                 .observeOn(AndroidSchedulers.mainThread())
                 //onNExt onThrowable onComplete
-                .subscribe(list->{
-
-                }, throwable->{
-
-                }, ()->{
-
+                .subscribe(list -> {
+                    Log.e(TAG, " " + list.size());
+                    readSrl.setRefreshing(false);
+                    mStories = new ArrayList<DailyStories>();
+                    mStories.addAll(list);
+                    adapter = new ReadAdapter(mStories);
+                    readRv.setAdapter(adapter);
+                }, throwable -> {
+                    Log.e(TAG, " " + throwable);
+                }, () -> {
+                    Log.e(TAG, " onComplete ");
                 });
     }
-
 
     @Override
     protected int getLayoutId() {
@@ -103,5 +113,48 @@ public class ReadingFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+
+    class ReadAdapter extends RecyclerView.Adapter<ReadAdapter.ViewHolder> {
+        LayoutInflater mLayoutInflater;
+        List<DailyStories> stories;
+        public ReadAdapter(List<DailyStories> list) {
+            this.mLayoutInflater = LayoutInflater.from(mActivity);
+            this.stories = list;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ViewHolder(mLayoutInflater.inflate(R.layout.layout_read_item, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            DailyStories story = stories.get(position);
+            ImageUtil.displayImageByUrl(mActivity, story.getImages().get(0), holder.ivReadImg);
+            holder.tvReadTitle.setText(story.getTitle());
+        }
+
+        @Override
+        public int getItemCount() {
+            return stories.size();
+        }
+
+
+        class ViewHolder extends RecyclerView.ViewHolder{
+            @BindView(R.id.iv_read_img)
+            ImageView ivReadImg;
+            @BindView(R.id.tv_read_title)
+            TextView tvReadTitle;
+//            @BindView(R.id.tv_read_content)
+//            TextView tvReadContent;
+
+            ViewHolder(View view) {
+                super(view);
+                ButterKnife.bind(this, view);
+
+            }
+        }
     }
 }

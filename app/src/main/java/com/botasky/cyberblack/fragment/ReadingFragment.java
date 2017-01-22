@@ -20,6 +20,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -73,19 +75,22 @@ public class ReadingFragment extends BaseFragment {
     }
 
     private void getReadDatas(){
-//        HttpHelper httpHelper = new HttpHelper();
-//        httpHelper.setEnd_points(Urls.ZHI_HU_HOST);
-//        httpHelper.getService(ZhiHuDailyApi.class)
-//                .getLastNews()
-//                .subscribeOn(Schedulers.newThread())
-//                .observeOn(Schedulers.immediate())
-//                .map(new Func1<DailyResponse, List<DailyStories>>() {
-//
-//                    @Override
-//                    public List<DailyStories> call(DailyResponse dailyResponse) {
-//                        return null;
-//                    }
-//                })
+        HttpHelper httpHelper = new HttpHelper();
+        httpHelper.setEnd_points(Urls.ZHI_HU_HOST);
+        httpHelper.getService(ZhiHuDailyApi.class)
+                .getLastNews()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.immediate())
+                .map(dailyResponse -> dailyResponse.getStories())
+                .observeOn(AndroidSchedulers.mainThread())
+                //onNExt onThrowable onComplete
+                .subscribe(list->{
+
+                }, throwable->{
+
+                }, ()->{
+
+                });
     }
 
 

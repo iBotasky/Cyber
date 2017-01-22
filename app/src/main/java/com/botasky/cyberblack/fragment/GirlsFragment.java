@@ -94,7 +94,7 @@ public class GirlsFragment extends BaseFragment {
         //设置LinearLayoutManager
 //        linearLayoutManager = new LinearLayoutManager(mActivity);
 //        linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
-        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         girlsRecyle.setLayoutManager(staggeredGridLayoutManager);
         //设置Adapter
         girlsRecyle.setAdapter(adapter = new RefreshRecyclerAdapter(mActivity));
@@ -155,10 +155,10 @@ public class GirlsFragment extends BaseFragment {
 
     }
 
-    private int findMax(int[] A){
+    private int findMax(int[] A) {
         int size = A.length;
         int max = 0;
-        for (int i = 0; i < size ; i++){
+        for (int i = 0; i < size; i++) {
             max = max >= A[i] ? max : A[i];
         }
         return max;
@@ -173,45 +173,30 @@ public class GirlsFragment extends BaseFragment {
         httpHelper.setEnd_points(Urls.GANK_IO_HOST);
         httpHelper.getService(GirlsApi.class)
                 .getGirls(page)
-                .subscribeOn(Schedulers.io())//指定在io线程创建爱你Observable
-                .observeOn(Schedulers.io())//指定在io线程做变换操作
-                .flatMap(new Func1<GirlsResponse, Observable<GirlsResponse.ResultsBean>>() {
-                    @Override
-                    public Observable<GirlsResponse.ResultsBean> call(GirlsResponse girlsResponse) {
-                        return Observable.from(girlsResponse.getResults());
-                    }
-                })
-                .flatMap(new Func1<GirlsResponse.ResultsBean, Observable<GirlsResponse.ResultsBean>>() {
-                    @Override
-                    public Observable<GirlsResponse.ResultsBean> call(GirlsResponse.ResultsBean resultsBean) {
-                        int[] bounds = ImageUtil.returnBitMapBounds(resultsBean.getUrl());
-                        resultsBean.setWith(bounds[0]);
-                        resultsBean.setHeight(bounds[1]);
-                        return Observable.just(resultsBean);
-                    }
+                .subscribeOn(Schedulers.newThread())//指定在新线程创建爱你Observable
+                .observeOn(Schedulers.immediate())//指定在当前线程做变换操作
+                .flatMap(girlsResponse -> Observable.from(girlsResponse.getResults()))
+                .flatMap(resultsBean -> {
+                    int[] bounds = ImageUtil.returnBitMapBounds(resultsBean.getUrl());
+                    resultsBean.setWith(bounds[0]);
+                    resultsBean.setHeight(bounds[1]);
+                    return Observable.just(resultsBean);
                 })
                 .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者操作
-                .subscribe(new Subscriber<GirlsResponse.ResultsBean>() {
-                    @Override
-                    public void onCompleted() {
-                        girlsSwipeRefresh.setRefreshing(false);
-                        adapter.addMoreItem(data);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        girlsSwipeRefresh.setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onNext(GirlsResponse.ResultsBean resultsBean) {
-                        data.add(resultsBean);
-                    }
+                .subscribe(resultsBean -> {
+                    data.add(resultsBean);
+                }, throwable -> {
+                    Log.e("Girls ", " onFailure " + throwable);
+                }, () -> {
+                    girlsSwipeRefresh.setRefreshing(false);
+                    adapter.addMoreItem(data);
                 });
         page += 1;
     }
 
-    
+
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

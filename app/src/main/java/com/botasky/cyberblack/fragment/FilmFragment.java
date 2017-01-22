@@ -91,81 +91,42 @@ public class FilmFragment extends BaseFragment {
                 .getInTheaters()
                 .subscribeOn(Schedulers.io())//指定在io线程做Observeable的创建
                 .observeOn(Schedulers.io())//指定在io线程做map转换
-                .map(new Func1<FilmsResponse, List<SubjectsBean>>() {
-                    @Override
-                    public List<SubjectsBean> call(FilmsResponse filmsResponse) {
-                        return filmsResponse.getSubjects();
-                    }
-                })
+                .map(filmsResponse -> filmsResponse.getSubjects())
                 .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者
-                .subscribe(new Action1<List<SubjectsBean>>() {
-                    @Override
-                    public void call(List<SubjectsBean> subjectsBeen) {
-                        Log.e("Films", "" + subjectsBeen.size());
-                        //完成后设置刷新为false
-                        filmRlInTheaters.setVisibility(View.VISIBLE);
-                        film_in_theaters_recyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_IN_THEATER));
-                    }
+                .subscribe(subjectsBeen -> {
+                    //完成后设置刷新为false
+                    filmRlInTheaters.setVisibility(View.VISIBLE);
+                    film_in_theaters_recyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_IN_THEATER));
                 });
 
         httpHelper.getService(DouBanApi.class)
                 .getComingSoon(0, 20)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .map(new Func1<FilmsResponse, List<SubjectsBean>>() {
-                    @Override
-                    public List<SubjectsBean> call(FilmsResponse filmsResponse) {
-                        return filmsResponse.getSubjects();
-                    }
-                })
+                .map(filmsResponse -> filmsResponse.getSubjects())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<SubjectsBean>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.e("FilmComingSoon", " onCOmplete");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("FilmComingSoon", " ERROR " + e);
-                    }
-
-                    @Override
-                    public void onNext(List<SubjectsBean> subjectsBeen) {
-                        Log.e("FilmComingSoon", " " + subjectsBeen.size());
-                        filmRlComingSoon.setVisibility(View.VISIBLE);
-                        filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_COMING_SOON));
-                    }
+                .subscribe(subjectsBeen -> {
+                    filmRlComingSoon.setVisibility(View.VISIBLE);
+                    filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_COMING_SOON));
+                }, throwable -> {
+                    Log.e("FilmComingSoon", " onFailure " + throwable);
+                }, () -> {
+                    Log.e("FilmComingSoon", " onComplete");
                 });
 
         httpHelper.getService(DouBanApi.class)
-                .getTop250(0,20)
+                .getTop250(0, 20)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.immediate())
-                .map(new Func1<FilmsResponse, List<SubjectsBean>>() {
-                    @Override
-                    public List<SubjectsBean> call(FilmsResponse filmsResponse) {
-                        return filmsResponse.getSubjects();
-                    }
-                })
+                .map(filmsResponse -> filmsResponse.getSubjects())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<SubjectsBean>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("FilmTop250", " ERROR " + e);
-                    }
-
-                    @Override
-                    public void onNext(List<SubjectsBean> subjectsBeen) {
-                        Log.e("FilmTop250", " " + subjectsBeen.size());
-                        filmLlTop250.setVisibility(View.VISIBLE);
-                        filmTop250Recyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_TOP_250));
-                    }
+                .subscribe(subjectsBeen -> {
+                    filmLlTop250.setVisibility(View.VISIBLE);
+                    filmTop250Recyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_TOP_250));
+                }, throwable -> {
+                    Log.e("Film250", " onFailure " + throwable);
+                }, () -> {
+                    Log.e("Film250", " onComplete ");
                 });
     }
 

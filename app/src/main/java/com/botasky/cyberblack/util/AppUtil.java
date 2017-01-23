@@ -19,10 +19,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import com.botasky.cyberblack.CyberApplication;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -643,4 +641,8 @@ public class AppUtil {
         }
         return null;
     }
+
+
+
+
 }

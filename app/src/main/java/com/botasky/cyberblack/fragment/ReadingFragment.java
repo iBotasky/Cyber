@@ -73,14 +73,21 @@ public class ReadingFragment extends BaseFragment {
         readSrl.setProgressViewOffset(false, 0, (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
                         .getDisplayMetrics()));
-        readSrl.setRefreshing(true);
+
+        getReadDatas();
+        readSrl.setOnRefreshListener(() -> {
+            getReadDatas();
+        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         readRv.setLayoutManager(linearLayoutManager);
-        getReadDatas();
+
 
     }
 
     private void getReadDatas() {
+        if (readSrl.isRefreshing())
+            return;
+        readSrl.setRefreshing(true);
         HttpHelper httpHelper = new HttpHelper();
         httpHelper.setEnd_points(Urls.ZHI_HU_HOST);
         httpHelper.getService(ZhiHuDailyApi.class)
@@ -119,6 +126,7 @@ public class ReadingFragment extends BaseFragment {
     class ReadAdapter extends RecyclerView.Adapter<ReadAdapter.ViewHolder> {
         LayoutInflater mLayoutInflater;
         List<DailyStories> stories;
+
         public ReadAdapter(List<DailyStories> list) {
             this.mLayoutInflater = LayoutInflater.from(mActivity);
             this.stories = list;
@@ -142,7 +150,7 @@ public class ReadingFragment extends BaseFragment {
         }
 
 
-        class ViewHolder extends RecyclerView.ViewHolder{
+        class ViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.iv_read_img)
             ImageView ivReadImg;
             @BindView(R.id.tv_read_title)

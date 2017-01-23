@@ -1,11 +1,8 @@
 package com.botasky.cyberblack.fragment;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -28,9 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -99,7 +94,9 @@ public class GirlsFragment extends BaseFragment {
         //第一次去访问初始化数据
         getData();
         //设置下拉刷新
-        girlsSwipeRefresh.setOnRefreshListener(() -> girlsSwipeRefresh.setRefreshing(false));
+        girlsSwipeRefresh.setOnRefreshListener(() -> {
+            getData();
+        });
 
         //设置RecyleView滑动监听
         girlsRecyle.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -122,8 +119,6 @@ public class GirlsFragment extends BaseFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-//                staggeredGridLayoutManager.findLastVisibleItemPositions()
                 if (lastVisibleItem == null) {
                     lastVisibleItem = new int[staggeredGridLayoutManager.getSpanCount()];
                 }
@@ -145,8 +140,10 @@ public class GirlsFragment extends BaseFragment {
 
 
     private void getData() {
-        //Rxjava map是一对一的转换， flatmap是一对多的转换，这里z还需要得到一个list，就可以，所以用map
+        if (girlsSwipeRefresh.isRefreshing())
+            return;
         girlsSwipeRefresh.setRefreshing(true);
+        //Rxjava map是一对一的转换， flatmap是一对多的转换，这里z还需要得到一个list，就可以，所以用map
         final List<GirlsResponse.ResultsBean> data = new ArrayList<>();
         HttpHelper httpHelper = new HttpHelper();
         httpHelper.setEnd_points(Urls.GANK_IO_HOST);
@@ -172,8 +169,6 @@ public class GirlsFragment extends BaseFragment {
                 });
         page += 1;
     }
-
-
 
 
     @Override

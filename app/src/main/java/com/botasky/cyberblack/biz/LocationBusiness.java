@@ -62,7 +62,6 @@ public class LocationBusiness {
         if (mLocationClient != null && mLocationListener != null) {
             mLocationClient.stopLocation();
             mLocationClient.unRegisterLocationListener(mLocationListener);
-            mLocationClient.setLocationListener(null);
             mLocationClient = null;
             mLocationListener = null;
         }
@@ -97,9 +96,7 @@ public class LocationBusiness {
                                     .getWeather(s, Constant.WEATHER_API_KEY);
                         }
                     })
-                    .map(new Func1<JsonObject, LocWeatherBean>() {
-                        @Override
-                        public LocWeatherBean call(JsonObject jsonObject) {
+                    .map(jsonObject ->  {
                             LocWeatherBean locWeatherBean = new LocWeatherBean();
                             JsonObject result = jsonObject.getAsJsonObject("result");
                             JsonObject data = result.getAsJsonObject("data");
@@ -110,7 +107,6 @@ public class LocationBusiness {
                             locWeatherBean.setInfo(weather.get("info").getAsString());
                             locWeatherBean.setTemperature(Integer.valueOf(weather.get("temperature").getAsString()));
                             return locWeatherBean;
-                        }
                     })
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<LocWeatherBean>() {

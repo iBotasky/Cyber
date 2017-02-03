@@ -24,6 +24,7 @@ import java.net.URL;
 public class ImageUtil {
     /**
      * 通过URL显示图片
+     *
      * @param context
      * @param url
      * @param imageView
@@ -42,17 +43,18 @@ public class ImageUtil {
 
     /**
      * 通过URL显示图片
+     *
      * @param context
      * @param url
      * @param imageView
-     * @param with  需要调整的宽度
-     * @param height 需要调整的高度
+     * @param with      需要调整的宽度
+     * @param height    需要调整的高度
      */
     public static void displayImageByUrl(Context context, String url, ImageView imageView, int with, int height) {
         Glide
                 .with(context)
                 .load(url)
-                .override(with,height)
+                .override(with, height)
                 .placeholder(R.drawable.default_image)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .centerCrop()
@@ -64,11 +66,12 @@ public class ImageUtil {
 
     /**
      * 通过URL播放GIF
+     *
      * @param context
      * @param url
      * @param imageView
      */
-    public static void displayGifByUrl(Context context, String url, ImageView imageView){
+    public static void displayGifByUrl(Context context, String url, ImageView imageView) {
         Glide.with(context)
                 .load(url)
                 .asGif()
@@ -80,6 +83,7 @@ public class ImageUtil {
 
     /**
      * return a bitmap bounds from service
+     *
      * @param url
      * @return bitmap with and height
      */
@@ -87,7 +91,7 @@ public class ImageUtil {
         URL myFileUrl = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        int[] bounds = new int[]{0,0};
+        int[] bounds = new int[]{0, 0};
         try {
             myFileUrl = new URL(url);
             HttpURLConnection conn;
@@ -102,7 +106,7 @@ public class ImageUtil {
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }  catch (IOException e) {
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -110,10 +114,9 @@ public class ImageUtil {
     }
 
 
-
-    public static void displayWeather(Context context, int img, ImageView imageView){
+    public static void displayWeather(Context context, int img, ImageView imageView) {
         int resourceId = 0;
-        switch (img){
+        switch (img) {
             case 0:
                 resourceId = R.drawable.w_sunny;
                 break;

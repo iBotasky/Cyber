@@ -58,7 +58,8 @@
             android:process=":remote" />
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".activity.ReadDetailActivity"></activity>
+        <activity android:name=".activity.ReadDetailActivity" />
+        <activity android:name=".activity.TestLayoutActivity"></activity>
     </application>
 
 </manifest>

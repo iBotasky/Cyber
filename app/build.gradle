@@ -13,8 +13,20 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+//            signingConfig signingConfigs.release
+
+            proguardFile 'proguard/proguard-butterknife.pro'
+            proguardFile 'proguard/proguard-glide.pro'
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -49,8 +61,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
 
-    def appDependencies = rootProject.ext.appDependencies
-    def testDependencies = rootProject.ext.appTestDependencies
+    def appDependencies = rootProject.ext.appDependencies               //项目依赖
+    def testDependencies = rootProject.ext.appTestDependencies          //测试依赖
     compile appDependencies.appcompact
     compile appDependencies.appDesign
     compile appDependencies.cardView
@@ -58,7 +70,6 @@ dependencies {
     compile appDependencies.palttte
     compile appDependencies.percent
     compile appDependencies.suportV4
-
     compile appDependencies.constrain
     compile appDependencies.bootstrap
     compile appDependencies.glide

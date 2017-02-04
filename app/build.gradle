@@ -62,7 +62,7 @@ dependencies {
 
 
     def appDependencies = rootProject.ext.appDependencies               //项目依赖
-    def testDependencies = rootProject.ext.appTestDependencies          //测试依赖
+    def testDependencies = rootProject.ext.appTestDependencies          //测试依赖 LeakCanary之类
     compile appDependencies.appcompact
     compile appDependencies.appDesign
     compile appDependencies.cardView

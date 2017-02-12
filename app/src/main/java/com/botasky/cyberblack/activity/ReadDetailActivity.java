@@ -1,6 +1,7 @@
 package com.botasky.cyberblack.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebView;
 
 import com.botasky.cyberblack.R;
@@ -60,9 +61,11 @@ public class ReadDetailActivity extends BaseActivity {
 
     private void loadView(DailyDetailResponse dailyDetailResponse) {
         wvContent.getSettings().setJavaScriptEnabled(true);
-        String css = "<link rel=\"stylesheet\" href=\" + " + dailyDetailResponse.getCss() + "\" type=\"text/css\">";
+        String css = "<link rel=\"stylesheet\" href=\"" + dailyDetailResponse.getCss().get(0) + "\" type=\"text/css\">";
         String html = "<html><head>" + css + "</head><body>" + dailyDetailResponse.getBody() + "</body></html>";
         html = html.replace("<div class=\"img-place-holder\">", "");
+//        Log.e("html", css + " daily " + dailyDetailResponse.getCss().get(0));
+
         wvContent.loadDataWithBaseURL("x-data://base", html, "text/html", "UTF-8", null);
     }
 }

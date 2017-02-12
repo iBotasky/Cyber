@@ -1,5 +1,6 @@
 package com.botasky.cyberblack.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.botasky.cyberblack.R;
+import com.botasky.cyberblack.activity.ReadDetailActivity;
+import com.botasky.cyberblack.adapter.ItemClickListener;
+import com.botasky.cyberblack.constant.Constant;
 import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.ZhiHuDailyApi;
@@ -103,6 +107,11 @@ public class ReadingFragment extends BaseFragment {
                     mStories = new ArrayList<DailyStories>();
                     mStories.addAll(list);
                     adapter = new ReadAdapter(mStories);
+                    adapter.setOnItemClickListener(((view, position) -> {
+                        Intent intent = new Intent(mActivity, ReadDetailActivity.class);
+                        intent.putExtra(Constant.INTENT_KEY_DAILY_ID, list.get(position).getId());
+                        startActivity(intent);
+                    }));
                     readRv.setAdapter(adapter);
                 }, throwable -> {
                     Log.e(TAG, " " + throwable);
@@ -126,6 +135,7 @@ public class ReadingFragment extends BaseFragment {
     class ReadAdapter extends RecyclerView.Adapter<ReadAdapter.ViewHolder> {
         LayoutInflater mLayoutInflater;
         List<DailyStories> stories;
+        ItemClickListener mClickListener;
 
         public ReadAdapter(List<DailyStories> list) {
             this.mLayoutInflater = LayoutInflater.from(mActivity);
@@ -134,7 +144,7 @@ public class ReadingFragment extends BaseFragment {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(mLayoutInflater.inflate(R.layout.layout_read_item, parent, false));
+            return new ViewHolder(mLayoutInflater.inflate(R.layout.layout_read_item, parent, false), mClickListener);
         }
 
         @Override
@@ -150,7 +160,16 @@ public class ReadingFragment extends BaseFragment {
         }
 
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        /**
+         * 设置Item点击监听
+         *
+         * @param listener
+         */
+        public void setOnItemClickListener(ItemClickListener listener) {
+            this.mClickListener = listener;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             @BindView(R.id.iv_read_img)
             ImageView ivReadImg;
             @BindView(R.id.tv_read_title)
@@ -158,10 +177,21 @@ public class ReadingFragment extends BaseFragment {
 //            @BindView(R.id.tv_read_content)
 //            TextView tvReadContent;
 
-            ViewHolder(View view) {
+            ItemClickListener mClickListener;
+
+            ViewHolder(View view, ItemClickListener listener) {
                 super(view);
                 ButterKnife.bind(this, view);
+                mClickListener = listener;
+                view.setOnClickListener(this);
 
+            }
+
+            @Override
+            public void onClick(View v) {
+                if (mClickListener != null) {
+                    mClickListener.onItemClick(v, getPosition());
+                }
             }
         }
     }

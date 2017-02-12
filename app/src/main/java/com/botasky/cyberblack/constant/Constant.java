@@ -15,4 +15,9 @@ public class Constant {
     public static final String WEATHER_API_KEY = "e5df882ccc00955519ef10739ac3f8ad";
     public static final String WEATHER_BROCAST = "ACTION_WEATHER";
     public static final String WEATHER_KEY = "WEATHER_KEY";
+
+    /**
+     * intent传值得一些KEY
+     */
+    public static final String INTENT_KEY_DAILY_ID = "daily_id";
 }

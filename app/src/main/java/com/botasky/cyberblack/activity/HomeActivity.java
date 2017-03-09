@@ -39,10 +39,12 @@ import com.botasky.cyberblack.fragment.ReadingFragment;
 import com.botasky.cyberblack.fragment.SplashFragment;
 import com.botasky.cyberblack.service.CyberService;
 import com.botasky.cyberblack.util.ImageUtil;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Manifest;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -120,11 +122,24 @@ public class HomeActivity extends BaseActivity {
         intentFilter.addAction(Constant.WEATHER_BROCAST);
         registerReceiver(mReceiver, intentFilter);
 
-        //启动后台进程
-        Intent toService = new Intent(HomeActivity.this, CyberService.class);
-        toService.putExtra(CyberService.SERVICE_COMMAND, CyberService.SERVICE_COMMAND_START_LOC_FOR_WEAHTER);
-        startService(toService);
 
+        requestPermission();
+
+    }
+
+    private void requestPermission() {
+        RxPermissions rxPermission = new RxPermissions(this);
+        rxPermission.request(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                .subscribe(granted ->{
+                    if (granted){
+                        //启动后台进程
+                        Intent toService = new Intent(HomeActivity.this, CyberService.class);
+                        toService.putExtra(CyberService.SERVICE_COMMAND, CyberService.SERVICE_COMMAND_START_LOC_FOR_WEAHTER);
+                        startService(toService);
+                    }else {
+
+                    }
+                });
     }
 
     @Override

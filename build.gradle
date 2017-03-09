@@ -46,7 +46,8 @@ ext {
     rxJavaVersion = '1.1.0'
     //rxAndroid
     rxAndroidVersion = '1.2.0'
-
+    //rxPermission
+    rxPermission = '0.9.3@aar'
 
     appDependencies = [
             appcompact          :"com.android.support:appcompat-v7:${supportAppcompatVersion}",
@@ -65,7 +66,8 @@ ext {
             retrofitConverter   :"com.squareup.retrofit2:converter-gson:${retrofitVersion}",
             retrofitAdapter     :"com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
             rxJava              :"io.reactivex:rxjava:${rxJavaVersion}",
-            rxAndroid           :"io.reactivex:rxandroid:${rxAndroidVersion}"
+            rxAndroid           :"io.reactivex:rxandroid:${rxAndroidVersion}",
+            rxPermission        :"com.tbruyelle.rxpermissions:rxpermissions:${rxPermission}"
     ]
     appTestDependencies = [
 

@@ -6,13 +6,27 @@
         <item name="colorPrimary">@color/grey_800</item>
         <item name="colorPrimaryDark">@color/grey_900</item>
         <item name="colorAccent">@color/grey_500</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowNoTitle">true</item>
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:windowNoTitle">true</item>-->
     </style>
 
     <!--本来要在Fragment中用这个theme，但是发现没有作用-->
     <style name="splash_theme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_style</item>
+    </style>
+    
+    <!--toolbar 设置-->
+    <style name="Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:background">@color/grey_800</item>
+    </style>
+
+    <!--返回键-->
+    <style name="BackButton">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">14dp</item>
+        <item name="android:src">@drawable/icon_back</item>
     </style>
 
 </resources>

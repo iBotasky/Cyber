@@ -65,6 +65,10 @@
 
         <activity android:name=".activity.ReadDetailActivity" />
         <activity android:name=".activity.TestLayoutActivity"></activity>
+
+        <activity
+            android:name=".activity.PhotoViewerActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

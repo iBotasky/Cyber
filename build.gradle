@@ -16,6 +16,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -46,6 +47,8 @@ ext {
     rxJavaVersion = '1.1.0'
     //rxAndroid
     rxAndroidVersion = '1.2.0'
+    //photoView
+    photoViewVersion = '2.0.0'
 
     appDependencies = [
             appcompact          :"com.android.support:appcompat-v7:${supportAppcompatVersion}",
@@ -65,7 +68,8 @@ ext {
             retrofitAdapter     :"com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
             rxJava              :"io.reactivex:rxjava:${rxJavaVersion}",
             rxAndroid           :"io.reactivex:rxandroid:${rxAndroidVersion}",
-            rxPermission        :"com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar"
+            rxPermission        :"com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar",
+            photoView           :"com.github.chrisbanes:PhotoView:${photoViewVersion}"
     ]
     appTestDependencies = [
 

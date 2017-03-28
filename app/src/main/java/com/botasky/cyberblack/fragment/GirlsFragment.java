@@ -1,5 +1,6 @@
 package com.botasky.cyberblack.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.botasky.cyberblack.R;
+import com.botasky.cyberblack.activity.PhotoViewerActivity;
+import com.botasky.cyberblack.adapter.RecyclerItemClickListener;
 import com.botasky.cyberblack.adapter.RefreshRecyclerAdapter;
+import com.botasky.cyberblack.constant.Constant;
 import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.GirlsApi;
@@ -46,6 +50,7 @@ public class GirlsFragment extends BaseFragment {
     private int[] lastVisibleItem;
     private int lastVisibleItemPosition;
     private int page = 1;
+    private ArrayList<String> urls;
 
 
     public static GirlsFragment newInstance(String args) {
@@ -74,6 +79,7 @@ public class GirlsFragment extends BaseFragment {
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
+        urls = new ArrayList<String>();
         girlsRecyle.setHasFixedSize(true);
         //设置刷新图标背景色
         girlsSwipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
@@ -91,6 +97,23 @@ public class GirlsFragment extends BaseFragment {
         girlsRecyle.setLayoutManager(staggeredGridLayoutManager);
         //设置Adapter
         girlsRecyle.setAdapter(adapter = new RefreshRecyclerAdapter(mActivity));
+        //设置点击事件
+        girlsRecyle.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), girlsRecyle,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(getContext(), PhotoViewerActivity.class);
+                        intent.putExtra(Constant.INTENT_KEY_PHOTO_VIEWER_CURRENT, position);
+                        intent.putStringArrayListExtra(Constant.INTENT_KEY_PHOTO_VIEWER_IMG_RULS, urls);
+                        getContext().startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                }));
+
         //第一次去访问初始化数据
         getData();
         //设置下拉刷新
@@ -153,6 +176,7 @@ public class GirlsFragment extends BaseFragment {
                 .observeOn(Schedulers.immediate())//指定在当前线程做变换操作
                 .flatMap(girlsResponse -> Observable.from(girlsResponse.getResults()))
                 .flatMap(resultsBean -> {
+                    urls.add(resultsBean.getUrl());
                     int[] bounds = ImageUtil.returnBitMapBounds(resultsBean.getUrl());
                     resultsBean.setWith(bounds[0]);
                     resultsBean.setHeight(bounds[1]);

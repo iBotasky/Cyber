@@ -20,4 +20,6 @@ public class Constant {
      * intent传值得一些KEY
      */
     public static final String INTENT_KEY_DAILY_ID = "daily_id";
+    public static final String INTENT_KEY_PHOTO_VIEWER_CURRENT = "current_position";
+    public static final String INTENT_KEY_PHOTO_VIEWER_IMG_RULS = "imags";
 }

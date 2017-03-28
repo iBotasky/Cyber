@@ -69,7 +69,7 @@ public class PhotoViewerActivity extends BaseActivity {
         @Override
         public View instantiateItem(ViewGroup container, int position) {
             PhotoView photoView = new PhotoView(container.getContext());
-            ImageUtil.displayImageByUrl(PhotoViewerActivity.this,urls.get(position), photoView);
+            ImageUtil.displayImageByUrlFitCenter(PhotoViewerActivity.this,urls.get(position), photoView);
 
             // Now just add PhotoView to ViewPager and return it
             container.addView(photoView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

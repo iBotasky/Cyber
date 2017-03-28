@@ -1,6 +1,7 @@
 package com.botasky.cyberblack.view;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
@@ -9,7 +10,7 @@ import android.widget.LinearLayout;
  */
 
 public class AlphaLinearLayout extends LinearLayout {
-    public AlphaLinearLayout(Context context) {
+    public AlphaLinearLayout(Context context, AttributeSet attrs) {
         super(context);
         this.setOnTouchListener((v, motionEvent) -> {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){

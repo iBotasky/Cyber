@@ -2,14 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_600"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar style="@style/Toolbar">
 
-        <ImageView
+        <!--<com.botasky.cyberblack.view.AlphaImageView-->
+            <!--android:id="@+id/iv_back"-->
+            <!--style="@style/BackButton" />-->
+        <com.botasky.cyberblack.view.AlphaImageView
             android:id="@+id/iv_back"
-            style="@style/BackButton" />
-
+            android:layout_height="14dp"
+            android:layout_width="20dp"
+            android:clickable="true"
+            android:src="@drawable/icon_back"/>
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.view.ViewPager

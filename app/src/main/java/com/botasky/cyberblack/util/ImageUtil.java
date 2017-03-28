@@ -47,6 +47,25 @@ public class ImageUtil {
      * @param context
      * @param url
      * @param imageView
+     */
+    public static void displayImageByUrlFitCenter(Context context, String url, ImageView imageView) {
+        Glide
+                .with(context)
+                .load(url)
+                .placeholder(R.drawable.default_image)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .fitCenter()
+                .crossFade()
+                .into(imageView);
+
+    }
+
+    /**
+     * 通过URL显示图片
+     *
+     * @param context
+     * @param url
+     * @param imageView
      * @param with      需要调整的宽度
      * @param height    需要调整的高度
      */

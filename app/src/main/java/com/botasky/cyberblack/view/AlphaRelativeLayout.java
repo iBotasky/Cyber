@@ -1,6 +1,7 @@
 package com.botasky.cyberblack.view;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
@@ -9,7 +10,7 @@ import android.widget.RelativeLayout;
  */
 
 public class AlphaRelativeLayout extends RelativeLayout {
-    public AlphaRelativeLayout(Context context) {
+    public AlphaRelativeLayout(Context context, AttributeSet attrs) {
         super(context);
         this.setOnTouchListener((v, motionEvent) -> {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){

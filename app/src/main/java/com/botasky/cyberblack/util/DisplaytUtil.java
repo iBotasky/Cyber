@@ -19,4 +19,13 @@ public class DisplaytUtil {
         WindowManager wm = (WindowManager) CyberApplication.getmContext().getSystemService(Context.WINDOW_SERVICE);
         return wm.getDefaultDisplay().getWidth();
     }
+
+    /**
+     * 获得屏幕高度
+     * @return
+     */
+    public static int getScreenHeight(){
+        WindowManager wm = (WindowManager) CyberApplication.getmContext().getSystemService(Context.WINDOW_SERVICE);
+        return wm.getDefaultDisplay().getHeight();
+    }
 }

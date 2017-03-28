@@ -89,8 +89,7 @@ public class ReadingFragment extends BaseFragment {
     }
 
     private void getReadDatas() {
-        if (readSrl.isRefreshing())
-            return;
+        Log.e("SwipeLayout", " isRefresh " + readSrl.isRefreshing());
         readSrl.setRefreshing(true);
         HttpHelper httpHelper = new HttpHelper();
         httpHelper.setEnd_points(Urls.ZHI_HU_HOST);
@@ -103,7 +102,6 @@ public class ReadingFragment extends BaseFragment {
                 //onNExt onThrowable onComplete
                 .subscribe(list -> {
                     Log.e(TAG, " " + list.size());
-                    readSrl.setRefreshing(false);
                     mStories = new ArrayList<DailyStories>();
                     mStories.addAll(list);
                     adapter = new ReadAdapter(mStories);
@@ -115,8 +113,10 @@ public class ReadingFragment extends BaseFragment {
                     readRv.setAdapter(adapter);
                 }, throwable -> {
                     Log.e(TAG, " " + throwable);
+                    readSrl.setRefreshing(false);
                 }, () -> {
                     Log.e(TAG, " onComplete ");
+                    readSrl.setRefreshing(false);
                 });
     }
 

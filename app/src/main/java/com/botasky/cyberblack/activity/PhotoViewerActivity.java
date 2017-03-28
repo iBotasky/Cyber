@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by botasky on 28/03/2017.
@@ -29,6 +30,7 @@ public class PhotoViewerActivity extends BaseActivity {
 
     private ArrayList<String> urls;
     private int current;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,11 @@ public class PhotoViewerActivity extends BaseActivity {
 
     }
 
+    @OnClick(R.id.iv_back)
+    public void onViewClicked() {
+        this.finish();
+    }
+
     class SamplePagerAdapter extends PagerAdapter {
 
         @Override
@@ -69,7 +76,7 @@ public class PhotoViewerActivity extends BaseActivity {
         @Override
         public View instantiateItem(ViewGroup container, int position) {
             PhotoView photoView = new PhotoView(container.getContext());
-            ImageUtil.displayImageByUrlFitCenter(PhotoViewerActivity.this,urls.get(position), photoView);
+            ImageUtil.displayImageByUrlFitCenter(PhotoViewerActivity.this, urls.get(position), photoView);
 
             // Now just add PhotoView to ViewPager and return it
             container.addView(photoView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -88,4 +95,5 @@ public class PhotoViewerActivity extends BaseActivity {
         }
 
     }
+
 }

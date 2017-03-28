@@ -18,7 +18,7 @@
     <!--toolbar 设置-->
     <style name="Toolbar">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@color/grey_800</item>
     </style>
 

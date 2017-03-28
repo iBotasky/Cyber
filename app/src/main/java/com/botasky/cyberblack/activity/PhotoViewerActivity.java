@@ -3,9 +3,10 @@ package com.botasky.cyberblack.activity;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.constant.Constant;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by botasky on 28/03/2017.
@@ -25,8 +25,8 @@ import butterknife.OnClick;
 public class PhotoViewerActivity extends BaseActivity {
     @BindView(R.id.view_pager)
     ViewPager viewPager;
-    @BindView(R.id.iv_back)
-    ImageView back;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     private ArrayList<String> urls;
     private int current;
@@ -48,12 +48,29 @@ public class PhotoViewerActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-        if (urls != null) {
 
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (urls != null) {
             SamplePagerAdapter adapter = new SamplePagerAdapter();
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(current);
         }
+    }
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -61,10 +78,6 @@ public class PhotoViewerActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.iv_back)
-    public void onViewClicked() {
-        this.finish();
-    }
 
     class SamplePagerAdapter extends PagerAdapter {
 

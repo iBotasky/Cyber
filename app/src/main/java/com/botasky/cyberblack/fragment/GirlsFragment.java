@@ -2,6 +2,7 @@ package com.botasky.cyberblack.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -105,7 +106,9 @@ public class GirlsFragment extends BaseFragment {
                         Intent intent = new Intent(getContext(), PhotoViewerActivity.class);
                         intent.putExtra(Constant.INTENT_KEY_PHOTO_VIEWER_CURRENT, position);
                         intent.putStringArrayListExtra(Constant.INTENT_KEY_PHOTO_VIEWER_IMG_RULS, urls);
-                        getContext().startActivity(intent);
+//                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, urls.get(position));
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight());
+                        getContext().startActivity(intent,options.toBundle());
                     }
 
                     @Override

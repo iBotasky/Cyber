@@ -64,7 +64,9 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".activity.ReadDetailActivity" />
-        <activity android:name=".activity.TestLayoutActivity"/>
+        <activity android:name=".activity.TestLayoutActivity">
+
+        </activity>
 
 
         <activity

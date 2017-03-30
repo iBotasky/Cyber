@@ -1,11 +1,16 @@
 package com.botasky.cyberblack.fragment;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.ChangeTransform;
+import android.transition.Transition;
 import android.util.Log;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,9 +111,7 @@ public class ReadingFragment extends BaseFragment {
                     mStories.addAll(list);
                     adapter = new ReadAdapter(mStories);
                     adapter.setOnItemClickListener(((view, position) -> {
-                        Intent intent = new Intent(mActivity, ReadDetailActivity.class);
-                        intent.putExtra(Constant.INTENT_KEY_DAILY_ID, list.get(position).getId());
-                        startActivity(intent);
+                        startActivity(view, position, list);
                     }));
                     readRv.setAdapter(adapter);
                 }, throwable -> {
@@ -119,6 +122,26 @@ public class ReadingFragment extends BaseFragment {
                     readSrl.setRefreshing(false);
                 });
     }
+
+    /**
+     * 动画启动
+     * @param view
+     * @param position
+     */
+    private void startActivity(View view, int position, List<DailyStories> list){
+        View img = view.findViewById(R.id.iv_read_img);
+        // set share element transition animation for current activity
+        Transition ts = new ChangeTransform();
+        ts.setDuration(3000);
+        getActivity().getWindow().setExitTransition(ts);
+
+        Intent intent = new Intent(mActivity, ReadDetailActivity.class);
+        intent.putExtra(Constant.INTENT_KEY_DAILY_ID, list.get(position).getId());
+        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                Pair.create(img,"img")).toBundle();
+        startActivity(intent, bundle);
+    }
+
 
     @Override
     protected int getLayoutId() {

@@ -27,6 +27,7 @@
 
             <ImageView
                 android:id="@+id/iv_read_bg"
+                android:transitionName="img"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:fitsSystemWindows="true"

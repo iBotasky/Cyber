@@ -3,7 +3,9 @@ package com.botasky.cyberblack.activity;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.view.MenuItem;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.ImageView;
 
@@ -43,6 +45,8 @@ public class ReadDetailActivity extends BaseActivity {
 
     @Override
     protected void initVariables() {
+
+
         id = getIntent().getIntExtra(Constant.INTENT_KEY_DAILY_ID, 0);
     }
 
@@ -85,6 +89,7 @@ public class ReadDetailActivity extends BaseActivity {
     }
 
     private void loadView(DailyDetailResponse dailyDetailResponse) {
+        ivBackground.setTransitionName("img");
         ImageUtil.displayImageByUrl(this,dailyDetailResponse.getImage(),ivBackground);
         collaspToolbar.setTitle(dailyDetailResponse.getTitle());
         wvContent.getSettings().setJavaScriptEnabled(true);

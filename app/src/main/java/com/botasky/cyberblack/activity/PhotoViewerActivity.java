@@ -48,8 +48,6 @@ public class PhotoViewerActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -67,7 +65,7 @@ public class PhotoViewerActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                finish();
+                finishAfterTransition();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -114,4 +112,9 @@ public class PhotoViewerActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAfterTransition();
+    }
 }

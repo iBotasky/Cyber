@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.network.response.GirlsResponse;
-import com.botasky.cyberblack.util.AppUtil;
 import com.botasky.cyberblack.util.DisplaytUtil;
 import com.botasky.cyberblack.util.ImageUtil;
 

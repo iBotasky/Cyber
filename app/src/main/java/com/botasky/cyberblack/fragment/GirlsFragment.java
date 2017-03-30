@@ -108,7 +108,7 @@ public class GirlsFragment extends BaseFragment {
                         intent.putStringArrayListExtra(Constant.INTENT_KEY_PHOTO_VIEWER_IMG_RULS, urls);
 //                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, urls.get(position));
                         ActivityOptionsCompat options = ActivityOptionsCompat.makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight());
-                        getContext().startActivity(intent,options.toBundle());
+                        getContext().startActivity(intent, options.toBundle());
                     }
 
                     @Override

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
-import android.view.Window;
+import android.transition.Fade;
 
 import com.botasky.cyberblack.R;
 import com.flyco.systembar.SystemBarHelper;
@@ -20,10 +20,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // set Explode enter transition animation for current activity
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().setEnterTransition(new Explode().setDuration(1000));
-        getWindow().setExitTransition(null);
+        setActivityStartAnimation();
         setContentView(getLayoutId());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        //透明状态栏，5.0系统
@@ -52,5 +49,16 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract int getLayoutId();
 
+    protected void setActivityStartAnimation(){
+        // set Explode enter transition animation for current activity default
+        getWindow().setEnterTransition(new Fade().setDuration(500));
+        getWindow().setExitTransition(new Explode().setDuration(500));
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAfterTransition();
+    }
 }

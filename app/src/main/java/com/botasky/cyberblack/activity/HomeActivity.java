@@ -56,8 +56,6 @@ import butterknife.ButterKnife;
 public class HomeActivity extends BaseActivity {
     @BindView(R.id.home_drawer)
     DrawerLayout homeDrawer;
-    @BindView(R.id.home_tool_bar)
-    Toolbar homeToolBar;
     @BindView(R.id.home_tab_layout)
     TabLayout homeTabLayout;
     @BindView(R.id.home_app_bar)
@@ -106,7 +104,6 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
         final SplashFragment splashFragment = new SplashFragment();
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.home_view_continer, splashFragment);
@@ -147,7 +144,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-        setSupportActionBar(homeToolBar);
+        setSupportActionBar(toolbar);
         setupDrawerContent();
         //获得ActionBar
         final ActionBar actionBar = getSupportActionBar();
@@ -163,6 +160,11 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void loadData() {
 
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_home;
     }
 
     @Override

@@ -69,7 +69,8 @@ ext {
             rxJava              :"io.reactivex:rxjava:${rxJavaVersion}",
             rxAndroid           :"io.reactivex:rxandroid:${rxAndroidVersion}",
             rxPermission        :"com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar",
-            photoView           :"com.github.chrisbanes:PhotoView:${photoViewVersion}"
+            photoView           :"com.github.chrisbanes:PhotoView:${photoViewVersion}",
+            systembar           :"com.flyco.systembar:FlycoSystemBar_Lib:1.0.0@aar"
     ]
     appTestDependencies = [
 

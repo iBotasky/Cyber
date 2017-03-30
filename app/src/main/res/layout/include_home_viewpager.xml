@@ -17,7 +17,7 @@
         <!--exitUntilCollapsed:滚动退出屏幕，最后折叠在顶端。-->
         <android.support.v7.widget.Toolbar
             android:padding="10dp"
-            android:id="@+id/home_tool_bar"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"

@@ -35,7 +35,6 @@ public class PhotoViewerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_viewer);
         ButterKnife.bind(this);
         initVariables();
         initViews();
@@ -77,6 +76,11 @@ public class PhotoViewerActivity extends BaseActivity {
     @Override
     protected void loadData() {
 
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_viewer;
     }
 
 

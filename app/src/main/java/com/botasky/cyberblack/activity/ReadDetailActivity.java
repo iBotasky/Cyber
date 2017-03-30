@@ -36,7 +36,6 @@ public class ReadDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_read_detail);
         ButterKnife.bind(this);
         initVariables();
         loadData();
@@ -67,6 +66,11 @@ public class ReadDetailActivity extends BaseActivity {
                 }, () -> {
 
                 });
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_read_detail;
     }
 
     @Override

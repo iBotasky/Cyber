@@ -51,7 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void setActivityStartAnimation(){
         // set Explode enter transition animation for current activity default
-        getWindow().setEnterTransition(new Fade().setDuration(500));
+        getWindow().setEnterTransition(new Explode().setDuration(500));
         getWindow().setExitTransition(new Explode().setDuration(500));
 
     }

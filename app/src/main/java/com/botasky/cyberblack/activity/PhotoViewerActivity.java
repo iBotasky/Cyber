@@ -2,6 +2,9 @@ package com.botasky.cyberblack.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -11,10 +14,13 @@ import android.view.ViewGroup;
 
 import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.constant.Constant;
+import com.botasky.cyberblack.fragment.BaseFragment;
+import com.botasky.cyberblack.fragment.PhotoFragment;
 import com.botasky.cyberblack.util.ImageUtil;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,9 +58,17 @@ public class PhotoViewerActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         if (urls != null) {
-            SamplePagerAdapter adapter = new SamplePagerAdapter();
+//            SamplePagerAdapter adapter = new SamplePagerAdapter();
+//            viewPager.setAdapter(adapter);
+//            viewPager.setCurrentItem(current);
+            Adapter adapter = new Adapter(getSupportFragmentManager());
+            for (String url : urls){
+                PhotoFragment fragment =  PhotoFragment.newInstance(url);
+                adapter.addFragment(fragment);
+            }
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(current);
+
         }
     }
 
@@ -82,39 +96,36 @@ public class PhotoViewerActivity extends BaseActivity {
     }
 
 
-    class SamplePagerAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return urls.size();
-        }
-
-        @Override
-        public View instantiateItem(ViewGroup container, int position) {
-            PhotoView photoView = new PhotoView(container.getContext());
-            ImageUtil.displayImageByUrlFitCenter(PhotoViewerActivity.this, urls.get(position), photoView);
-
-            // Now just add PhotoView to ViewPager and return it
-            container.addView(photoView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            return photoView;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finishAfterTransition();
+    }
+
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<BaseFragment> fragmentList = new ArrayList<>();
+
+        public Adapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        public void addFragment(BaseFragment fragment) {
+            fragmentList.add(fragment);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentList.get(position).getTitle();
+        }
     }
 }

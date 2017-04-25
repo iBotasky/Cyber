@@ -132,7 +132,7 @@ public class ReadingFragment extends BaseFragment {
         View img = view.findViewById(R.id.iv_read_img);
         // set share element transition animation for current activity
         Transition ts = new ChangeTransform();
-        ts.setDuration(3000);
+        ts.setDuration(400);
         getActivity().getWindow().setExitTransition(ts);
 
         Intent intent = new Intent(mActivity, ReadDetailActivity.class);

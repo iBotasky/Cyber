@@ -131,7 +131,7 @@ public class ScanView extends View {
         float r = centerX * 0.8f / 4;
         oval1 = new RectF(-r * 2, -r * 2, r * 2, r * 2);
         oval2 = new RectF(-r * 3, -r * 3, r * 3, r * 3);
-        oval3 = new RectF(-centerX * 0.8f, -centerX * 0.8f, centerX * 0.8f, centerX * 0.8f);
+        oval3 = new RectF(-r * 4, -r * 4, r * 4, r * 4);
         setMeasuredDimension(width, height);
 
     }
@@ -140,7 +140,6 @@ public class ScanView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.translate(centerX, centerY);
-        canvas.scale(1, -1);
         canvas.save();
         canvas.rotate(rota);
         drawViews(canvas);
@@ -170,10 +169,9 @@ public class ScanView extends View {
         Rect bounds = new Rect();
         mTextPaint.getTextBounds(content, 0, content.length(), bounds);
         RectF rectF = new RectF(bounds);
-        RectF nameRect = new RectF(nameRoundMargin + rectF.left, -nameRoundHight, nameRoundMargin * 2 + rectF.right, nameRoundHight);
+        RectF nameRect = new RectF(nameRoundMargin + rectF.left, nameRoundHight, nameRoundMargin * 2 + rectF.right, -nameRoundHight);
         canvas.drawRoundRect(nameRect, 100, 100, mDefaultPaint);
         mTextPaint.setColor(Color.WHITE);
-        canvas.scale(1, -1);
         Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
         float top = fontMetrics.top;//为基线到字体上边框的距离,即上图中的top
         float bottom = fontMetrics.bottom;//为基线到字体下边框的距离,即上图中的bottom

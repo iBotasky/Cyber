@@ -37,6 +37,7 @@ import com.botasky.cyberblack.fragment.FilmFragment;
 import com.botasky.cyberblack.fragment.GirlsFragment;
 import com.botasky.cyberblack.fragment.ReadingFragment;
 import com.botasky.cyberblack.fragment.SplashFragment;
+import com.botasky.cyberblack.fragment.TestUIFragment;
 import com.botasky.cyberblack.service.CyberService;
 import com.botasky.cyberblack.util.ImageUtil;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -208,12 +209,13 @@ public class HomeActivity extends BaseActivity {
 
 
     private void setupViewPager() {
-        FilmFragment filmFragment = FilmFragment.newInstance("电影");
+//        FilmFragment filmFragment = FilmFragment.newInstance("电影");
+        TestUIFragment testUIFragment = TestUIFragment.newInstance("测试");
         ReadingFragment readingFragment = ReadingFragment.newInstance("知乎");
         GirlsFragment girlsFragment = GirlsFragment.newInstance("妹子");
         Adapter adapter = new Adapter(getSupportFragmentManager());
 
-        adapter.addFragment(filmFragment);
+        adapter.addFragment(testUIFragment);
         adapter.addFragment(readingFragment);
         adapter.addFragment(girlsFragment);
         homeViewPager.setAdapter(adapter);

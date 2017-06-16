@@ -25,6 +25,11 @@ public class TestUIFragment extends BaseFragment {
         return rootView;
     }
 
+    private void test(){
+        String b = "Hello, Again";
+    }
+
+    
 
     public static TestUIFragment newInstance(String args) {
         Bundle bundle = new Bundle();

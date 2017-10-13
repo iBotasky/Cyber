@@ -12,6 +12,7 @@ import com.botasky.cyberblack.view.ScanView;
 import butterknife.ButterKnife;
 
 /**
+ * 测试自定义View的测试界面
  * Created by botasky on 27/05/2017.
  */
 
@@ -29,7 +30,7 @@ public class TestUIFragment extends BaseFragment {
         String b = "Hello, Again";
     }
 
-    
+
 
     public static TestUIFragment newInstance(String args) {
         Bundle bundle = new Bundle();

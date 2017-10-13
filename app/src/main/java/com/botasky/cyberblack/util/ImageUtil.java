@@ -115,7 +115,6 @@ public class ImageUtil {
             myFileUrl = new URL(url);
             HttpURLConnection conn;
             conn = (HttpURLConnection) myFileUrl.openConnection();
-
             conn.setDoInput(true);
             conn.connect();
             InputStream is = conn.getInputStream();

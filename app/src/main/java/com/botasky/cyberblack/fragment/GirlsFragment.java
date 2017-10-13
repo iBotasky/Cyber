@@ -106,7 +106,6 @@ public class GirlsFragment extends BaseFragment {
                         Intent intent = new Intent(getContext(), PhotoViewerActivity.class);
                         intent.putExtra(Constant.INTENT_KEY_PHOTO_VIEWER_CURRENT, position);
                         intent.putStringArrayListExtra(Constant.INTENT_KEY_PHOTO_VIEWER_IMG_RULS, urls);
-//                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, "photo_view");
                         ActivityOptionsCompat options = ActivityOptionsCompat.makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight());
                         getContext().startActivity(intent, options.toBundle());
                     }
@@ -168,6 +167,7 @@ public class GirlsFragment extends BaseFragment {
     private void getData() {
         if (girlsSwipeRefresh.isRefreshing())
             return;
+        Log.e("Girls", "Start Download");
         girlsSwipeRefresh.setRefreshing(true);
         //Rxjava map是一对一的转换， flatmap是一对多的转换，这里z还需要得到一个list，就可以，所以用map
         final List<GirlsResponse.ResultsBean> data = new ArrayList<>();
@@ -183,14 +183,20 @@ public class GirlsFragment extends BaseFragment {
                     int[] bounds = ImageUtil.returnBitMapBounds(resultsBean.getUrl());
                     resultsBean.setWith(bounds[0]);
                     resultsBean.setHeight(bounds[1]);
+                    if (resultsBean.getWith() == 0 || resultsBean.getHeight() == 0){
+                        return Observable.just(null);
+                    }
                     return Observable.just(resultsBean);
                 })
+                .filter(resultsBean -> resultsBean != null)
                 .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者操作
                 .subscribe(resultsBean -> {
+                    Log.e("Girls", "onSuccess");
                     data.add(resultsBean);
                 }, throwable -> {
                     Log.e("Girls ", " onFailure " + throwable);
                 }, () -> {
+                    Log.e("Girls", "onComplete");
                     girlsSwipeRefresh.setRefreshing(false);
                     adapter.addMoreItem(data);
                 });

@@ -75,6 +75,7 @@ public class RefreshRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+
             int with = IMAGE_WITH;
             int height = (with * mBeans.get(position).getHeight() / mBeans.get(position).getWith());
 

@@ -144,6 +144,7 @@ public class FilmFragment extends BaseFragment {
         return rootView;
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

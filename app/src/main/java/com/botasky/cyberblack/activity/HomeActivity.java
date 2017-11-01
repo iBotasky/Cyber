@@ -55,6 +55,7 @@ import butterknife.ButterKnife;
  */
 
 public class HomeActivity extends BaseActivity {
+
     @BindView(R.id.home_drawer)
     DrawerLayout homeDrawer;
     @BindView(R.id.home_tab_layout)

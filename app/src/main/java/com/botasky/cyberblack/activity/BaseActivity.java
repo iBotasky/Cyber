@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.transition.Fade;
+import android.util.Log;
 
 import com.botasky.cyberblack.R;
 import com.flyco.systembar.SystemBarHelper;
@@ -23,6 +24,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setActivityStartAnimation();
         setContentView(getLayoutId());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
 //        //透明状态栏，5.0系统
 //        getWindow().setStatusBarColor(Color.TRANSPARENT);
 //        getWindow()

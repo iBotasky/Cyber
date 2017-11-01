@@ -50,7 +50,7 @@ public class GirlsFragment extends BaseFragment {
     RefreshRecyclerAdapter adapter;
     private int[] lastVisibleItem;
     private int lastVisibleItemPosition;
-    private int page = 1;
+    private int page = 3;
     private ArrayList<String> urls;
 
 
@@ -178,15 +178,15 @@ public class GirlsFragment extends BaseFragment {
                 .subscribeOn(Schedulers.newThread())//指定在新线程创建爱你Observable
                 .observeOn(Schedulers.immediate())//指定在当前线程做变换操作
                 .flatMap(girlsResponse -> Observable.from(girlsResponse.getResults()))
-                .flatMap(resultsBean -> {
+                .map(resultsBean -> {
                     urls.add(resultsBean.getUrl());
                     int[] bounds = ImageUtil.returnBitMapBounds(resultsBean.getUrl());
                     resultsBean.setWith(bounds[0]);
                     resultsBean.setHeight(bounds[1]);
                     if (resultsBean.getWith() == 0 || resultsBean.getHeight() == 0){
-                        return Observable.just(null);
+                        return null;
                     }
-                    return Observable.just(resultsBean);
+                    return resultsBean;
                 })
                 .filter(resultsBean -> resultsBean != null)
                 .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者操作

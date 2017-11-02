@@ -2,111 +2,140 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
-    defaultConfig {
-        applicationId "com.botasky.cyberblack"
-        minSdkVersion 21
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
-        }
-
-        release {
-            minifyEnabled true
-            shrinkResources true
-//            signingConfig signingConfigs.release
-
-            proguardFile 'proguard/proguard-butterknife.pro'
-            proguardFile 'proguard/proguard-glide.pro'
-
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+  compileSdkVersion 25
+  buildToolsVersion '26.0.2'
+  defaultConfig {
+    applicationId "com.botasky.cyberblack"
+    minSdkVersion 21
+    targetSdkVersion 25
+    versionCode 1
+    versionName "1.0"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+  buildTypes {
+    debug {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.debug
     }
 
-    signingConfigs {
-        debug {
-            storeFile file("cyber.jks")
-            storePassword 'siriusabo'
-            keyAlias 'CyberBlack'
-            keyPassword 'siriusabo0203'
-        }
-    }
+    release {
+      minifyEnabled true
+      shrinkResources true
+      //            signingConfig signingConfigs.release
 
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
+      proguardFile 'proguard/proguard-butterknife.pro'
+      proguardFile 'proguard/proguard-glide.pro'
 
-    //支持lambda
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
+  }
+
+  signingConfigs {
+    debug {
+      storeFile file("cyber.jks")
+      storePassword 'siriusabo'
+      keyAlias 'CyberBlack'
+      keyPassword 'siriusabo0203'
+    }
+  }
+
+  sourceSets {
+    main {
+      jniLibs.srcDirs = ['libs']
+    }
+  }
+
+  //支持lambda
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testCompile 'junit:junit:4.12'
+  compile fileTree(include: ['*.jar'], dir: 'libs')
+  androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
+  testCompile 'junit:junit:4.12'
+  def appDependencies = rootProject.ext.appDependencies
 
+  //项目依赖
+  def testDependencies = rootProject.ext.appTestDependencies
 
-    def appDependencies = rootProject.ext.appDependencies               //项目依赖
-    def testDependencies = rootProject.ext.appTestDependencies          //测试依赖 LeakCanary之类
-    compile appDependencies.appcompact
-    compile appDependencies.appDesign
-    compile appDependencies.cardView
-    compile appDependencies.recycleView
-    compile appDependencies.palttte
-    compile appDependencies.percent
-    compile appDependencies.suportV4
-    compile appDependencies.constrain
-    compile appDependencies.bootstrap
-    compile appDependencies.glide
-    compile appDependencies.butterknife
-    annotationProcessor appDependencies.butterknifeCompiler
-    compile appDependencies.retrofit
-    compile appDependencies.retrofitConverter
-    compile appDependencies.retrofitAdapter
-    compile appDependencies.rxJava
-    compile appDependencies.rxAndroid
-    compile appDependencies.rxPermission
-    compile appDependencies.photoView
-    compile appDependencies.systembar
-//    //Material design
-//    compile 'com.android.support:appcompat-v7:25.1.1'
-//    compile 'com.android.support:design:25.1.1'
-//    compile 'com.android.support:cardview-v7:25.1.1'
-//    compile 'com.android.support:recyclerview-v7:25.1.1'
-//    compile 'com.android.support:palette-v7:25.1.1'
-//    compile 'com.android.support:percent:25.1.1'
-//    compile 'com.android.support:support-v4:25.1.1'
-//    //Android-bootstrap
-//    compile 'com.beardedhen:androidbootstrap:2.3.0'
-//    //butterkinfe
-//    compile 'com.jakewharton:butterknife:8.4.0'
-//    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-//    //Glide
-//    compile 'com.github.bumptech.glide:glide:3.7.0'
-//
-//    //Retrofit
-//    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-//    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-//    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-//    //Rxjava
-//    compile 'io.reactivex:rxjava:1.1.0'
-//    compile 'io.reactivex:rxandroid:1.2.0'
-//
-//    //一个官方可视化界面设计的测试库
-//    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+  //测试依赖 LeakCanary之类
+  compile appDependencies.appcompact
+  compile appDependencies.appDesign
+  compile appDependencies.cardView
+  compile appDependencies.recycleView
+  compile appDependencies.palttte
+  compile appDependencies.percent
+  compile appDependencies.suportV4
+  compile appDependencies.constrain
+  compile appDependencies.bootstrap
+  compile appDependencies.glide
+  compile appDependencies.butterknife
+  annotationProcessor appDependencies.butterknifeCompiler
+  compile appDependencies.retrofit
+  compile appDependencies.retrofitConverter
+  compile appDependencies.retrofitAdapter
+  compile appDependencies.rxJava
+  compile appDependencies.rxAndroid
+  compile appDependencies.rxPermission
+  compile appDependencies.photoView
+  compile appDependencies.systembar
+
+  //    //Material design
+
+  //    compile 'com.android.support:appcompat-v7:25.1.1'
+
+  //    compile 'com.android.support:design:25.1.1'
+
+  //    compile 'com.android.support:cardview-v7:25.1.1'
+
+  //    compile 'com.android.support:recyclerview-v7:25.1.1'
+
+  //    compile 'com.android.support:palette-v7:25.1.1'
+
+  //    compile 'com.android.support:percent:25.1.1'
+
+  //    compile 'com.android.support:support-v4:25.1.1'
+
+  //    //Android-bootstrap
+
+  //    compile 'com.beardedhen:androidbootstrap:2.3.0'
+
+  //    //butterkinfe
+
+  //    compile 'com.jakewharton:butterknife:8.4.0'
+
+  //    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
+  //    //Glide
+
+  //    compile 'com.github.bumptech.glide:glide:3.7.0'
+
+  //
+
+  //    //Retrofit
+
+  //    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+
+  //    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+  //    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+
+  //    //Rxjava
+
+  //    compile 'io.reactivex:rxjava:1.1.0'
+
+  //    compile 'io.reactivex:rxandroid:1.2.0'
+
+  //
+
+  //    //一个官方可视化界面设计的测试库
+
+  //    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
 }

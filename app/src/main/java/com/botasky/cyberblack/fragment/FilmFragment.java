@@ -18,6 +18,7 @@ import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.DouBanApi;
 import com.botasky.cyberblack.network.response.FilmsResponse;
 import com.botasky.cyberblack.network.response.SubjectsBean;
+import com.botasky.cyberblack.rx.ThreadScheduler;
 import com.botasky.cyberblack.util.ImageUtil;
 
 import java.util.List;
@@ -89,10 +90,8 @@ public class FilmFragment extends BaseFragment {
         httpHelper.setEnd_points(Urls.DOU_BAN_HOST);
         httpHelper.getService(DouBanApi.class)
                 .getInTheaters()
-                .subscribeOn(Schedulers.io())//指定在io线程做Observeable的创建
-                .observeOn(Schedulers.io())//指定在io线程做map转换
                 .map(filmsResponse -> filmsResponse.getSubjects())
-                .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者
+                .compose(ThreadScheduler.applySchedulers())
                 .subscribe(subjectsBeen -> {
                     //完成后设置刷新为false
                     filmRlInTheaters.setVisibility(View.VISIBLE);
@@ -101,10 +100,8 @@ public class FilmFragment extends BaseFragment {
 
         httpHelper.getService(DouBanApi.class)
                 .getComingSoon(0, 20)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
                 .map(filmsResponse -> filmsResponse.getSubjects())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(ThreadScheduler.applySchedulers())
                 .subscribe(subjectsBeen -> {
                     filmRlComingSoon.setVisibility(View.VISIBLE);
                     filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_COMING_SOON));
@@ -116,10 +113,8 @@ public class FilmFragment extends BaseFragment {
 
         httpHelper.getService(DouBanApi.class)
                 .getTop250(0, 20)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.immediate())
                 .map(filmsResponse -> filmsResponse.getSubjects())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(ThreadScheduler.applySchedulers())
                 .subscribe(subjectsBeen -> {
                     filmLlTop250.setVisibility(View.VISIBLE);
                     filmTop250Recyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_TOP_250));

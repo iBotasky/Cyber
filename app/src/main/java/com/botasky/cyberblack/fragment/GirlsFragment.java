@@ -50,7 +50,7 @@ public class GirlsFragment extends BaseFragment {
     RefreshRecyclerAdapter adapter;
     private int[] lastVisibleItem;
     private int lastVisibleItemPosition;
-    private int page = 3;
+    private int page = 0;
     private ArrayList<String> urls;
 
 
@@ -178,16 +178,7 @@ public class GirlsFragment extends BaseFragment {
                 .subscribeOn(Schedulers.newThread())//指定在新线程创建爱你Observable
                 .observeOn(Schedulers.immediate())//指定在当前线程做变换操作
                 .flatMap(girlsResponse -> Observable.from(girlsResponse.getResults()))
-                .map(resultsBean -> {
-                    urls.add(resultsBean.getUrl());
-                    int[] bounds = ImageUtil.returnBitMapBounds(resultsBean.getUrl());
-                    resultsBean.setWith(bounds[0]);
-                    resultsBean.setHeight(bounds[1]);
-                    if (resultsBean.getWith() == 0 || resultsBean.getHeight() == 0){
-                        return null;
-                    }
-                    return resultsBean;
-                })
+                .map(resultsBean -> calculaterBeanWidthAndHeight(resultsBean))
                 .filter(resultsBean -> resultsBean != null)
                 .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者操作
                 .subscribe(resultsBean -> {
@@ -203,6 +194,16 @@ public class GirlsFragment extends BaseFragment {
         page += 1;
     }
 
+    private GirlsResponse.ResultsBean calculaterBeanWidthAndHeight(GirlsResponse.ResultsBean bean){
+        urls.add(bean.getUrl());
+        int[] bounds = ImageUtil.returnBitMapBounds(bean.getUrl());
+        bean.setWith(bounds[0]);
+        bean.setHeight(bounds[1]);
+        if (bean.getWith() == 0 || bean.getHeight() == 0){
+            return null;
+        }
+        return bean;
+    }
 
     @Override
     public void onDestroyView() {

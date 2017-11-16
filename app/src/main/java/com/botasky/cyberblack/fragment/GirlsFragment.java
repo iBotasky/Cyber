@@ -22,6 +22,7 @@ import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.GirlsApi;
 import com.botasky.cyberblack.network.response.GirlsResponse;
+import com.botasky.cyberblack.rx.ThreadScheduler;
 import com.botasky.cyberblack.util.ImageUtil;
 
 import java.util.ArrayList;
@@ -175,12 +176,10 @@ public class GirlsFragment extends BaseFragment {
         httpHelper.setEnd_points(Urls.GANK_IO_HOST);
         httpHelper.getService(GirlsApi.class)
                 .getGirls(page)
-                .subscribeOn(Schedulers.newThread())//指定在新线程创建爱你Observable
-                .observeOn(Schedulers.immediate())//指定在当前线程做变换操作
                 .flatMap(girlsResponse -> Observable.from(girlsResponse.getResults()))
                 .map(resultsBean -> calculaterBeanWidthAndHeight(resultsBean))
                 .filter(resultsBean -> resultsBean != null)
-                .observeOn(AndroidSchedulers.mainThread())//指定在main线程做订阅者操作
+                .compose(ThreadScheduler.applySchedulers())
                 .subscribe(resultsBean -> {
                     Log.e("Girls", "onSuccess");
                     data.add(resultsBean);

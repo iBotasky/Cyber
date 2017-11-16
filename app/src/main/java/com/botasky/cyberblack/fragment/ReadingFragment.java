@@ -1,6 +1,5 @@
 package com.botasky.cyberblack.fragment;
 
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +25,7 @@ import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.ZhiHuDailyApi;
 import com.botasky.cyberblack.network.response.DailyStories;
+import com.botasky.cyberblack.rx.ThreadScheduler;
 import com.botasky.cyberblack.util.ImageUtil;
 
 import java.util.ArrayList;
@@ -33,8 +33,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Botasky on 27/11/2016.
@@ -100,11 +98,8 @@ public class ReadingFragment extends BaseFragment {
         httpHelper.setEnd_points(Urls.ZHI_HU_HOST);
         httpHelper.getService(ZhiHuDailyApi.class)
                 .getLastNews()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.immediate())
                 .map(dailyResponse -> dailyResponse.getStories())
-                .observeOn(AndroidSchedulers.mainThread())
-                //onNExt onThrowable onComplete
+                .compose(ThreadScheduler.applySchedulers())
                 .subscribe(list -> {
                     Log.e(TAG, " " + list.size());
                     mStories = new ArrayList<DailyStories>();

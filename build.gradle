@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "me.tatarka:gradle-retrolambda:3.7.0"
+//        classpath "me.tatarka:gradle-retrolambda:3.7.0"
         classpath 'com.android.tools.build:gradle:3.0.0'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -52,9 +52,9 @@ ext {
     //retrofit
     retrofitVersion = '2.1.0'
     //rxJava
-    rxJavaVersion = '1.1.0'
+    rxJavaVersion = '2.1.6'
     //rxAndroid
-    rxAndroidVersion = '1.2.0'
+    rxAndroidVersion = '2.0.1'
     //photoView
     photoViewVersion = '2.0.0'
 
@@ -74,8 +74,8 @@ ext {
             retrofit            :"com.squareup.retrofit2:retrofit:${retrofitVersion}",
             retrofitConverter   :"com.squareup.retrofit2:converter-gson:${retrofitVersion}",
             retrofitAdapter     :"com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
-            rxJava              :"io.reactivex:rxjava:${rxJavaVersion}",
-            rxAndroid           :"io.reactivex:rxandroid:${rxAndroidVersion}",
+            rxJava              :"io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            rxAndroid           :"io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
             rxPermission        :"com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar",
             photoView           :"com.github.chrisbanes:PhotoView:${photoViewVersion}",
             systembar           :"com.flyco.systembar:FlycoSystemBar_Lib:1.0.0@aar"

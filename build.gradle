@@ -50,7 +50,7 @@ ext {
     //glide
     glideVersion = '3.7.0'
     //retrofit
-    retrofitVersion = '2.2.0'
+    retrofitVersion = '2.3.0'
     //rxJava
     rxJavaVersion = '2.1.1'
     //rxAndroid

@@ -85,6 +85,7 @@ public class FilmFragment extends BaseFragment {
         httpHelper.getService(DouBanApi.class)
                 .getInTheaters()
                 .map(filmsResponse -> filmsResponse.getSubjects())
+                .compose(bindToLifecycle())
                 .compose(ThreadScheduler.applyIOSchedulers())
                 .subscribe(subjectsBeen -> {
                     //完成后设置刷新为false

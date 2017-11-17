@@ -49,38 +49,40 @@ ext {
     butterknifeVersion = '8.4.0'
     //glide
     glideVersion = '3.7.0'
+    //photoView
+    photoViewVersion = '2.0.0'
     //retrofit
     retrofitVersion = '2.3.0'
     //rxJava
-    rxJavaVersion = '2.1.1'
+    rxJavaVersion = '2.1.6'
     //rxAndroid
     rxAndroidVersion = '2.0.1'
-    //photoView
-    photoViewVersion = '2.0.0'
-    //Rxpermission
-//    rxpermission =
+    //rxlifecycle
+    rxLifecycleVersion = '2.2.1'
 
     appDependencies = [
-            appcompact          :"com.android.support:appcompat-v7:${supportAppcompatVersion}",
-            appDesign           :"com.android.support:design:${supportDesignVersion}",
-            cardView            :"com.android.support:cardview-v7:${supportCardViewVersion}",
-            recycleView         :"com.android.support:recyclerview-v7:${supportRecyleViewVersion}",
-            palttte             :"com.android.support:palette-v7:${supportPaletteVersion}",
-            percent             :"com.android.support:percent:${supportPercentVersion}",
-            suportV4            :"com.android.support:support-v4:${supportSupportV4Version}",
-            constrain           :"com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
-            bootstrap           :"com.beardedhen:androidbootstrap:${bootstrapVersion}",
-            glide               :"com.github.bumptech.glide:glide:${glideVersion}",
-            butterknife         :"com.jakewharton:butterknife:${butterknifeVersion}",
-            butterknifeCompiler :"com.jakewharton:butterknife-compiler:${butterknifeVersion}",
-            retrofit            :"com.squareup.retrofit2:retrofit:${retrofitVersion}",
-            retrofitConverter   :"com.squareup.retrofit2:converter-gson:${retrofitVersion}",
-            retrofitAdapter     :"com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
-            rxJava              :"io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
-            rxAndroid           :"io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
-            rxPermission        :"com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar",
-            photoView           :"com.github.chrisbanes:PhotoView:${photoViewVersion}",
-            systembar           :"com.flyco.systembar:FlycoSystemBar_Lib:1.0.0@aar"
+            appcompact              :"com.android.support:appcompat-v7:${supportAppcompatVersion}",
+            appDesign               :"com.android.support:design:${supportDesignVersion}",
+            cardView                :"com.android.support:cardview-v7:${supportCardViewVersion}",
+            recycleView             :"com.android.support:recyclerview-v7:${supportRecyleViewVersion}",
+            palttte                 :"com.android.support:palette-v7:${supportPaletteVersion}",
+            percent                 :"com.android.support:percent:${supportPercentVersion}",
+            suportV4                :"com.android.support:support-v4:${supportSupportV4Version}",
+            constrain               :"com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
+            bootstrap               :"com.beardedhen:androidbootstrap:${bootstrapVersion}",
+            glide                   :"com.github.bumptech.glide:glide:${glideVersion}",
+            butterknife             :"com.jakewharton:butterknife:${butterknifeVersion}",
+            butterknifeCompiler     :"com.jakewharton:butterknife-compiler:${butterknifeVersion}",
+            retrofit                :"com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            retrofitConverter       :"com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            retrofitAdapter         :"com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
+            rxJava                  :"io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            rxAndroid               :"io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
+            rxLifecycle             :"com.trello.rxlifecycle2:rxlifecycle:${rxLifecycleVersion}",
+            rxLifecycleComponent    :"com.trello.rxlifecycle2:rxlifecycle-components:${rxLifecycleVersion}",
+            photoView               :"com.github.chrisbanes:PhotoView:${photoViewVersion}",
+            rxPermission            :"com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar",
+            systembar               :"com.flyco.systembar:FlycoSystemBar_Lib:1.0.0@aar"
     ]
     appTestDependencies = [
 

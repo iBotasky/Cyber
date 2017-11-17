@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 //apply plugin: 'me.tatarka.retrolambda'
 
 android {
-  compileSdkVersion 25
+  compileSdkVersion 26
   buildToolsVersion '26.0.2'
   defaultConfig {
     applicationId "com.botasky.cyberblack"
@@ -64,10 +64,8 @@ dependencies {
   })
   testCompile 'junit:junit:4.12'
   def appDependencies = rootProject.ext.appDependencies
-
   //项目依赖
   def testDependencies = rootProject.ext.appTestDependencies
-
   //测试依赖 LeakCanary之类
   compile appDependencies.appcompact
   compile appDependencies.appDesign
@@ -89,4 +87,6 @@ dependencies {
   compile appDependencies.rxPermission
   compile appDependencies.photoView
   compile appDependencies.systembar
+  compile appDependencies.rxLifecycle
+  compile appDependencies.rxLifecycleComponent
 }

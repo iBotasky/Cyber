@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.botasky.cyberblack.activity.BaseActivity;
+import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import butterknife.Unbinder;
 
@@ -16,7 +17,7 @@ import butterknife.Unbinder;
  * Created by Botasky on 27/11/2016.
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends RxFragment {
     protected static final String TITLE = "title";
     protected BaseActivity mActivity;
     protected Unbinder unbinder;

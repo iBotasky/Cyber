@@ -99,7 +99,7 @@ public class ReadingFragment extends BaseFragment {
         httpHelper.getService(ZhiHuDailyApi.class)
                 .getLastNews()
                 .map(dailyResponse -> dailyResponse.getStories())
-                .compose(ThreadScheduler.applySchedulers())
+                .compose(ThreadScheduler.applyNewSchedulers())
                 .subscribe(list -> {
                     Log.e(TAG, " " + list.size());
                     mStories = new ArrayList<DailyStories>();

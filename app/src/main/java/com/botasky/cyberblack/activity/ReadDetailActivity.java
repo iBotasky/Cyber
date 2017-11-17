@@ -3,9 +3,7 @@ package com.botasky.cyberblack.activity;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
 import android.view.MenuItem;
-import android.view.Window;
 import android.webkit.WebView;
 import android.widget.ImageView;
 
@@ -15,12 +13,11 @@ import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.ZhiHuDailyApi;
 import com.botasky.cyberblack.network.response.DailyDetailResponse;
+import com.botasky.cyberblack.rx.ThreadScheduler;
 import com.botasky.cyberblack.util.ImageUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class ReadDetailActivity extends BaseActivity {
 
@@ -61,8 +58,7 @@ public class ReadDetailActivity extends BaseActivity {
         httpHelper.setEnd_points(Urls.ZHI_HU_HOST);
         httpHelper.getService(ZhiHuDailyApi.class)
                 .getNewsDetail(id)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(ThreadScheduler.applyNewSchedulers())
                 .subscribe(dailyDetailResponse -> {
                     loadView(dailyDetailResponse);
                 }, throwable -> {

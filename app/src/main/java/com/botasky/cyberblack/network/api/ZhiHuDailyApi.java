@@ -3,11 +3,9 @@ package com.botasky.cyberblack.network.api;
 import com.botasky.cyberblack.network.response.DailyDetailResponse;
 import com.botasky.cyberblack.network.response.DailyResponse;
 
-import org.json.JSONObject;
-
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import rx.Observable;
 
 /**
  * Created by Botasky on 21/12/2016.

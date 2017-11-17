@@ -1,8 +1,8 @@
 package com.botasky.cyberblack.rx;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Description：
@@ -10,56 +10,32 @@ import rx.schedulers.Schedulers;
  */
 
 public class ThreadScheduler {
-  private static final Observable.Transformer schedulersTransformer = new Observable.Transformer() {
-    @Override
-    public Object call(Object observable) {
-      return ((Observable) observable)
+
+  private static final ObservableTransformer schedulersNewThread = scheduler ->
+      scheduler
           .subscribeOn(Schedulers.newThread())
           .observeOn(AndroidSchedulers.mainThread());
-    }
-  };
 
-  private static final Observable.Transformer scheduldersTransformerIO = new Observable.Transformer() {
-    @Override
-    public Object call(Object o) {
-      return ((Observable)o)
+  private static final ObservableTransformer schedulersIoThread = scheduler ->
+      scheduler
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread());
-    }
-  };
 
-  public static final Observable.Transformer schedulersTransformerCal = new Observable.Transformer() {
-    @Override
-    public Object call(Object o) {
-      return ((Observable)o)
+  private static final ObservableTransformer schedulerCalThread = scheduler ->
+      scheduler
           .subscribeOn(Schedulers.computation())
-          .subscribeOn(AndroidSchedulers.mainThread());
-    }
-  };
+          .observeOn(AndroidSchedulers.mainThread());
 
-  public static <T> Observable.Transformer<T, T> applySchedulers() {
-    return (Observable.Transformer<T, T>) schedulersTransformer;
+  public static <T> ObservableTransformer<T, T> applyNewSchedulers() {
+    return (ObservableTransformer<T, T>) schedulersNewThread;
   }
 
-  public static <T> Observable.Transformer<T,T> applyIOSchedulers(){
-    return (Observable.Transformer<T,T>) scheduldersTransformerIO;
+  public static <T> ObservableTransformer<T, T> applyIOSchedulers() {
+    return (ObservableTransformer<T, T>) schedulersIoThread;
   }
 
-  public static <T> Observable.Transformer<T,T> applyCalculaterSchedulers(){
-    return (Observable.Transformer<T,T>) schedulersTransformerCal;
+  public static <T> ObservableTransformer<T, T> applyCalculaterSchedulers() {
+    return (ObservableTransformer<T, T>) schedulerCalThread;
   }
-
 }
 
-  //static final Observable.Transformer schedulersTransformer = new Observable.Transformer() {
-  //
-  //  @Override
-  //  public Object call(Object observable) {
-  //    return ((Observable) observable).subscribeOn(ThreadScheduler.newThread())
-  //        .observeOn(AndroidSchedulers.mainThread());
-  //  }
-  //};
-  //
-  //<T> Observable.Transformer<T, T> applySchedulers() {
-  //  return (Observable.Transformer<T, T>) schedulersTransformer;
-  //}

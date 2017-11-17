@@ -30,10 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
+import io.reactivex.Observable;
 /**
  * Created by Botasky on 27/11/2016.
  */
@@ -176,10 +173,10 @@ public class GirlsFragment extends BaseFragment {
         httpHelper.setEnd_points(Urls.GANK_IO_HOST);
         httpHelper.getService(GirlsApi.class)
                 .getGirls(page)
-                .flatMap(girlsResponse -> Observable.from(girlsResponse.getResults()))
+                .flatMap(girlsResponse -> Observable.fromIterable(girlsResponse.getResults()))
                 .map(resultsBean -> calculaterBeanWidthAndHeight(resultsBean))
                 .filter(resultsBean -> resultsBean != null)
-                .compose(ThreadScheduler.applySchedulers())
+                .compose(ThreadScheduler.applyIOSchedulers())
                 .subscribe(resultsBean -> {
                     Log.e("Girls", "onSuccess");
                     data.add(resultsBean);

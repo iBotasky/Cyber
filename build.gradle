@@ -50,13 +50,15 @@ ext {
     //glide
     glideVersion = '3.7.0'
     //retrofit
-    retrofitVersion = '2.1.0'
+    retrofitVersion = '2.2.0'
     //rxJava
-    rxJavaVersion = '2.1.6'
+    rxJavaVersion = '2.1.1'
     //rxAndroid
     rxAndroidVersion = '2.0.1'
     //photoView
     photoViewVersion = '2.0.0'
+    //Rxpermission
+//    rxpermission =
 
     appDependencies = [
             appcompact          :"com.android.support:appcompat-v7:${supportAppcompatVersion}",
@@ -73,10 +75,10 @@ ext {
             butterknifeCompiler :"com.jakewharton:butterknife-compiler:${butterknifeVersion}",
             retrofit            :"com.squareup.retrofit2:retrofit:${retrofitVersion}",
             retrofitConverter   :"com.squareup.retrofit2:converter-gson:${retrofitVersion}",
-            retrofitAdapter     :"com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
+            retrofitAdapter     :"com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
             rxJava              :"io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
             rxAndroid           :"io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
-            rxPermission        :"com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar",
+            rxPermission        :"com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar",
             photoView           :"com.github.chrisbanes:PhotoView:${photoViewVersion}",
             systembar           :"com.flyco.systembar:FlycoSystemBar_Lib:1.0.0@aar"
     ]

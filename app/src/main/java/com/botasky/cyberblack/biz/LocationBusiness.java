@@ -1,7 +1,6 @@
 package com.botasky.cyberblack.biz;
 
 import android.content.Intent;
-import android.util.Log;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -13,13 +12,10 @@ import com.botasky.cyberblack.entity.LocWeatherBean;
 import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.JuHeDataApi;
+import com.botasky.cyberblack.rx.ThreadScheduler;
 import com.google.gson.JsonObject;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
 
 /**
  * 定位服务单例
@@ -85,16 +81,11 @@ public class LocationBusiness {
         public void onLocationChanged(AMapLocation aMapLocation) {
             // TODO: 18/12/2016 获取天气发送到前台;完成后关掉定位
             Observable.just(aMapLocation.getCity())
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(Schedulers.immediate())
-                    .flatMap(new Func1<String, Observable<JsonObject>>() {
-                        @Override
-                        public Observable<JsonObject> call(String s) {
-                            HttpHelper httpHelper = new HttpHelper();
-                            httpHelper.setEnd_points(Urls.WEATHRE_HOST);
-                            return httpHelper.getService(JuHeDataApi.class)
-                                    .getWeather(s, Constant.WEATHER_API_KEY);
-                        }
+                    .flatMap(s -> {
+                      HttpHelper httpHelper = new HttpHelper();
+                      httpHelper.setEnd_points(Urls.WEATHRE_HOST);
+                      return httpHelper.getService(JuHeDataApi.class)
+                          .getWeather(s, Constant.WEATHER_API_KEY);
                     })
                     .map(jsonObject ->  {
                             LocWeatherBean locWeatherBean = new LocWeatherBean();
@@ -108,27 +99,14 @@ public class LocationBusiness {
                             locWeatherBean.setTemperature(Integer.valueOf(weather.get("temperature").getAsString()));
                             return locWeatherBean;
                     })
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<LocWeatherBean>() {
-                        @Override
-                        public void onCompleted() {
-                            stopLoc();
-                        }
+                    .compose(ThreadScheduler.applyNewSchedulers())
+                    .subscribe(locWeatherBean -> {
+                          Intent send = new Intent(Constant.WEATHER_BROCAST);
+                                  send.putExtra(Constant.WEATHER_KEY, locWeatherBean);
+                          send.putExtra(Constant.BROADCAST_KEY, Constant.WEATHER_BROCAST_KEY);
+                          CyberApplication.getInstance().getmContext().sendBroadcast(send);
 
-                        @Override
-                        public void onError(Throwable e) {
-                            stopLoc();
-                        }
-
-                        @Override
-                        public void onNext(LocWeatherBean locWeatherBean) {
-                            Log.e("HomeReceiver", " onNext");
-                            Intent send = new Intent(Constant.WEATHER_BROCAST);
-                            send.putExtra(Constant.WEATHER_KEY, locWeatherBean);
-                            send.putExtra(Constant.BROADCAST_KEY,Constant.WEATHER_BROCAST_KEY);
-                            CyberApplication.getInstance().getmContext().sendBroadcast(send);
-                        }
-                    });
+                    }, throwable -> stopLoc(), () -> stopLoc());
         }
     }
 

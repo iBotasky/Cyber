@@ -2,9 +2,9 @@ package com.botasky.cyberblack.network.api;
 
 import com.google.gson.JsonObject;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * 聚合数据的接口

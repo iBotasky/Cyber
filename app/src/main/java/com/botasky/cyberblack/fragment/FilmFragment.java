@@ -16,7 +16,6 @@ import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.DouBanApi;
-import com.botasky.cyberblack.network.response.FilmsResponse;
 import com.botasky.cyberblack.network.response.SubjectsBean;
 import com.botasky.cyberblack.rx.ThreadScheduler;
 import com.botasky.cyberblack.util.ImageUtil;
@@ -25,11 +24,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Botasky on 27/11/2016.
@@ -91,7 +85,7 @@ public class FilmFragment extends BaseFragment {
         httpHelper.getService(DouBanApi.class)
                 .getInTheaters()
                 .map(filmsResponse -> filmsResponse.getSubjects())
-                .compose(ThreadScheduler.applySchedulers())
+                .compose(ThreadScheduler.applyIOSchedulers())
                 .subscribe(subjectsBeen -> {
                     //完成后设置刷新为false
                     filmRlInTheaters.setVisibility(View.VISIBLE);
@@ -101,7 +95,7 @@ public class FilmFragment extends BaseFragment {
         httpHelper.getService(DouBanApi.class)
                 .getComingSoon(0, 20)
                 .map(filmsResponse -> filmsResponse.getSubjects())
-                .compose(ThreadScheduler.applySchedulers())
+                .compose(ThreadScheduler.applyIOSchedulers())
                 .subscribe(subjectsBeen -> {
                     filmRlComingSoon.setVisibility(View.VISIBLE);
                     filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_COMING_SOON));
@@ -114,7 +108,7 @@ public class FilmFragment extends BaseFragment {
         httpHelper.getService(DouBanApi.class)
                 .getTop250(0, 20)
                 .map(filmsResponse -> filmsResponse.getSubjects())
-                .compose(ThreadScheduler.applySchedulers())
+                .compose(ThreadScheduler.applyIOSchedulers())
                 .subscribe(subjectsBeen -> {
                     filmLlTop250.setVisibility(View.VISIBLE);
                     filmTop250Recyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_TOP_250));

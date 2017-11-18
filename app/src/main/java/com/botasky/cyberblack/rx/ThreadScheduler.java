@@ -6,7 +6,7 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * Description：
- * Created by 苏良波 on 2017/11/16.
+ * Created by Botasky on 2017/11/16.
  */
 
 public class ThreadScheduler {

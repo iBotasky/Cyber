@@ -31,6 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
+
 /**
  * Created by Botasky on 27/11/2016.
  */
@@ -177,6 +178,7 @@ public class GirlsFragment extends BaseFragment {
                 .map(resultsBean -> calculaterBeanWidthAndHeight(resultsBean))
                 .filter(resultsBean -> resultsBean != null)
                 .compose(ThreadScheduler.applyIOSchedulers())
+                .compose(bindToLifecycle())
                 .subscribe(resultsBean -> {
                     Log.e("Girls", "onSuccess");
                     data.add(resultsBean);
@@ -190,12 +192,12 @@ public class GirlsFragment extends BaseFragment {
         page += 1;
     }
 
-    private GirlsResponse.ResultsBean calculaterBeanWidthAndHeight(GirlsResponse.ResultsBean bean){
+    private GirlsResponse.ResultsBean calculaterBeanWidthAndHeight(GirlsResponse.ResultsBean bean) {
         urls.add(bean.getUrl());
         int[] bounds = ImageUtil.returnBitMapBounds(bean.getUrl());
         bean.setWith(bounds[0]);
         bean.setHeight(bounds[1]);
-        if (bean.getWith() == 0 || bean.getHeight() == 0){
+        if (bean.getWith() == 0 || bean.getHeight() == 0) {
             return null;
         }
         return bean;

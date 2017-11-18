@@ -92,7 +92,6 @@ public class ReadingFragment extends BaseFragment {
     }
 
     private void getReadDatas() {
-        Log.e("SwipeLayout", " isRefresh " + readSrl.isRefreshing());
         readSrl.setRefreshing(true);
         HttpHelper httpHelper = new HttpHelper();
         httpHelper.setEnd_points(Urls.ZHI_HU_HOST);
@@ -100,6 +99,7 @@ public class ReadingFragment extends BaseFragment {
                 .getLastNews()
                 .map(dailyResponse -> dailyResponse.getStories())
                 .compose(ThreadScheduler.applyNewSchedulers())
+                .compose(bindToLifecycle())
                 .subscribe(list -> {
                     Log.e(TAG, " " + list.size());
                     mStories = new ArrayList<DailyStories>();
@@ -120,10 +120,11 @@ public class ReadingFragment extends BaseFragment {
 
     /**
      * 动画启动
+     *
      * @param view
      * @param position
      */
-    private void startActivity(View view, int position, List<DailyStories> list){
+    private void startActivity(View view, int position, List<DailyStories> list) {
         View img = view.findViewById(R.id.iv_read_img);
         // set share element transition animation for current activity
         Transition ts = new ChangeTransform();
@@ -133,7 +134,7 @@ public class ReadingFragment extends BaseFragment {
         Intent intent = new Intent(mActivity, ReadDetailActivity.class);
         intent.putExtra(Constant.INTENT_KEY_DAILY_ID, list.get(position).getId());
         Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
-                Pair.create(img,"img")).toBundle();
+                Pair.create(img, "img")).toBundle();
         startActivity(intent, bundle);
     }
 

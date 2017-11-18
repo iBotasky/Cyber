@@ -44,9 +44,7 @@ public class FilmFragment extends BaseFragment {
     @BindView(R.id.film_ll_top_250)
     LinearLayout filmLlTop250;
 
-    //    private List<SubjectsBean> mFilms = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
-//    private Adapter adapter;
 
 
     public static FilmFragment newInstance(String title) {
@@ -97,6 +95,7 @@ public class FilmFragment extends BaseFragment {
                 .getComingSoon(0, 20)
                 .map(filmsResponse -> filmsResponse.getSubjects())
                 .compose(ThreadScheduler.applyIOSchedulers())
+                .compose(bindToLifecycle())
                 .subscribe(subjectsBeen -> {
                     filmRlComingSoon.setVisibility(View.VISIBLE);
                     filmComingSoonRecyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_COMING_SOON));
@@ -110,6 +109,7 @@ public class FilmFragment extends BaseFragment {
                 .getTop250(0, 20)
                 .map(filmsResponse -> filmsResponse.getSubjects())
                 .compose(ThreadScheduler.applyIOSchedulers())
+                .compose(bindToLifecycle())
                 .subscribe(subjectsBeen -> {
                     filmLlTop250.setVisibility(View.VISIBLE);
                     filmTop250Recyle.setAdapter(new Adapter(subjectsBeen, Adapter.FILM_TYPE_TOP_250));
@@ -219,96 +219,5 @@ public class FilmFragment extends BaseFragment {
             }
         }
     }
-
-
-//    class FilmSection extends StatelessSection {
-//        final static int TYPE_IN_THEATER = 0;//正在热映
-//        final static int TYPE_COMING_SOON = 1;//即将上映
-//        final static int TYPE_TOP_250 = 2;//TOP250
-//
-//        private List<SubjectsBean> list;
-//        private int type;
-//
-//
-//        public FilmSection(List<SubjectsBean> datas, int type) {
-//            super(R.layout.layout_film_head, R.layout.layout_film_item);
-//            this.type = type;
-//            this.list = datas;
-//        }
-//
-//        @Override
-//        public int getContentItemsTotal() {
-//            return list.size();
-//        }
-//
-//        @Override
-//        public RecyclerView.ViewHolder getItemViewHolder(View view) {
-//            return new ItemViewHolder(view);
-//        }
-//
-//        @Override
-//        public RecyclerView.ViewHolder getHeaderViewHolder(View view)
-//        {
-//
-//            return new HeadViewHolder(view);
-//        }
-//
-//        @Override
-//        public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
-//            ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-//            SubjectsBean bean = list.get(position);
-//            ImageUtil.displayImageByUrl(mActivity, bean.getImages().getLarge(), itemViewHolder.filmCover);
-//            itemViewHolder.filmName.setText(bean.getTitle());
-//            itemViewHolder.filmRating.setText(bean.getRating().getAverage() + "");
-//            itemViewHolder.filmRatingBar.setRating(((float) (bean.getRating().getAverage() / 2)));
-////            itemViewHolder.filmNamesetText(mFilms.get(position).getTitle());
-////            setText(mFilms.get(position).getRating().getAverage() + "");
-////            setRating((float) (mFilms.get(position).getRating().getAverage() / 2));
-//        }
-//
-//        @Override
-//        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder) {
-//            HeadViewHolder headViewHolder = ((HeadViewHolder) holder);
-//            switch (type){
-//                case TYPE_IN_THEATER:
-//                    headViewHolder.filmHeadTvTitle.setText("正在热映");
-//                    headViewHolder.filmHeadTvTitle2.setText("厦门");
-//                    break;
-//                default:
-//                    headViewHolder.filmHeadTvTitle.setText("正在热映");
-//                    headViewHolder.filmHeadTvTitle2.setText("厦门");
-//                    break;
-//            }
-//        }
-//
-//
-//        class HeadViewHolder extends RecyclerView.ViewHolder{
-//            @BindView(R.id.film_head_tv_title)
-//            BootstrapLabel filmHeadTvTitle;
-//            @BindView(R.id.film_head_tv_title2)
-//            BootstrapLabel filmHeadTvTitle2;
-//
-//            HeadViewHolder(View view) {
-//                super(view);
-//                ButterKnife.bind(this, view);
-//            }
-//        }
-//
-//        class ItemViewHolder extends RecyclerView.ViewHolder{
-//            @BindView(R.id.film_cover)
-//            ImageView filmCover;
-//            @BindView(R.id.film_name)
-//            TextView filmName;
-//            @BindView(R.id.film_rating_bar)
-//            RatingBar filmRatingBar;
-//            @BindView(R.id.film_rating)
-//            TextView filmRating;
-//
-//            ItemViewHolder(View view) {
-//                super(view);
-//                ButterKnife.bind(this, view);
-//            }
-//        }
-//    }
 
 }

@@ -90,5 +90,4 @@ dependencies {
     compile appDependencies.rxLifecycle
     compile appDependencies.rxLifecycleComponent
     compile appDependencies.brvah
-    compile appDependencies.adapterDelegate
 }

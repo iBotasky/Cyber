@@ -1,4 +1,4 @@
-package com.botasky.cyberblack.fragment;
+package com.botasky.cyberblack.fragment.girl;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import com.botasky.cyberblack.activity.PhotoViewerActivity;
 import com.botasky.cyberblack.adapter.RecyclerItemClickListener;
 import com.botasky.cyberblack.adapter.RefreshRecyclerAdapter;
 import com.botasky.cyberblack.constant.Constant;
+import com.botasky.cyberblack.fragment.BaseFragment;
 import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.GirlsApi;

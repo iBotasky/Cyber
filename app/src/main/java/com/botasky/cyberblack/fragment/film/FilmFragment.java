@@ -1,4 +1,4 @@
-package com.botasky.cyberblack.fragment;
+package com.botasky.cyberblack.fragment.film;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +13,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.botasky.cyberblack.R;
+import com.botasky.cyberblack.fragment.BaseFragment;
 import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.DouBanApi;

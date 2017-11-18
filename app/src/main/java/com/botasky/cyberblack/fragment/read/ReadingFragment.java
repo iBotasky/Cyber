@@ -1,4 +1,4 @@
-package com.botasky.cyberblack.fragment;
+package com.botasky.cyberblack.fragment.read;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -21,6 +21,7 @@ import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.activity.ReadDetailActivity;
 import com.botasky.cyberblack.adapter.ItemClickListener;
 import com.botasky.cyberblack.constant.Constant;
+import com.botasky.cyberblack.fragment.BaseFragment;
 import com.botasky.cyberblack.network.HttpHelper;
 import com.botasky.cyberblack.network.Urls;
 import com.botasky.cyberblack.network.api.ZhiHuDailyApi;

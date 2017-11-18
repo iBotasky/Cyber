@@ -1,23 +1,17 @@
 package com.botasky.cyberblack.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.botasky.cyberblack.R;
 import com.botasky.cyberblack.constant.Constant;
 import com.botasky.cyberblack.fragment.BaseFragment;
-import com.botasky.cyberblack.fragment.PhotoFragment;
-import com.botasky.cyberblack.util.ImageUtil;
-import com.github.chrisbanes.photoview.PhotoView;
+import com.botasky.cyberblack.fragment.photo.PhotoFragment;
 
 import java.util.ArrayList;
 import java.util.List;

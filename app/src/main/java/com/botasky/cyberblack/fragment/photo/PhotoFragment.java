@@ -1,4 +1,4 @@
-package com.botasky.cyberblack.fragment;
+package com.botasky.cyberblack.fragment.photo;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.botasky.cyberblack.R;
+import com.botasky.cyberblack.fragment.BaseFragment;
 import com.botasky.cyberblack.util.ImageUtil;
 
 import butterknife.BindView;
